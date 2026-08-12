@@ -20,7 +20,11 @@ jobs:
         run: |
           npm install
           npm install @capacitor/android
+          mkdir -p www
+          cp -r src/* www/
+          sed -i 's/"webDir": "src"/"webDir": "www"/' capacitor.config.json
           npx cap add android
+          npx cap sync
       - name: build android app
         run: |
           cd android
