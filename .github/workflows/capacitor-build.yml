@@ -1,3 +1,35 @@
 name: Build APK
 on:
   push:
+    branches: [ main, master ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: setup java
+        uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: 21
+      - name: install dependencies
+        run: |
+          npm install
+          npm install @capacitor/android
+          mkdir -p www
+          cp -r src/* www/
+          npx cap add android
+          npx cap sync
+      - name: build android app
+        run: |
+          cd android
+          ./gradlew assembleDebug
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: android/app/build/outputs/apk/debug/*.apk
