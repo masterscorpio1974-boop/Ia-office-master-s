@@ -1,0 +1,32 @@
+name: Build APK Capacitor
+on:
+  push:
+    branches: [ main, master ] ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: setup java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - name: install dependencies
+        run: |
+          npm install
+          npm install @capacitor/android
+          npx cap add android
+      - name: build android app
+        run: |
+          cd android
+          ./gradlew assembleDebug
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: android/app/build/outputs/apk/debug/*.apk
