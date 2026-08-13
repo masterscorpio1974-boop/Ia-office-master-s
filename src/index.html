@@ -1,57 +1,85 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>IA_OFFICE_ASSISTANT By MASTER S.</title>
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:;">
+    <title>IA_OFFICE_ASSISTANT By MASTER S.</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="head">
- <div class="hleft"><div class="logo">S</div><div><h1>IA_OFFICE_ASSISTANT</h1><small>By MASTER S. - REAL + EXE EDITION</small></div></div>
- <div class="hright"><span id="saveStatus" style="font-size:11px"></span><button onclick="saveAll()">💾 Guardar</button><button onclick="window.print()">🖨️ PDF</button><button onclick="exportDoc()">📄 Word</button></div>
-</div>
+    <div class="head">
+        <div class="logo">S</div>
+        <div class="title">
+            <h1>IA_OFFICE_ASSISTANT</h1>
+            <p><small>By MASTER S. · VERSIÓN OFICIAL</small></p>
+        </div>
+        <div class="bright">
+            <span id="saveStatus" style="font-size:11px"></span>
+            <button onclick="saveAll()">💾 Guardar todo</button>
+            <button onclick="guardar()">🔒 Guardar</button>
+        </div>
+    </div>
 
-<div class="ribbon" id="ribbonDoc">
- <button onclick="document.execCommand('bold')"><b>B</b></button>
- <button onclick="document.execCommand('italic')"><i>I</i></button>
- <button onclick="document.execCommand('underline')"><u>U</u></button>
- <div class="sep"></div>
- <select onchange="document.execCommand('fontSize',false,this.value)"><option value="3">Normal</option><option value="5">Grande</option><option value="7">Titulo</option></select>
- <select onchange="document.execCommand('foreColor',false,this.value)"><option value="">Color</option><option value="#000">Negro</option><option value="#0a84ff">Azul S</option><option value="#ff0000">Rojo</option></select>
- <div class="sep"></div>
- <button onclick="document.execCommand('justifyLeft')">⬅️</button>
- <button onclick="document.execCommand('justifyCenter')">↔️</button>
- <button onclick="document.execCommand('justifyRight')">➡️</button>
- <button onclick="document.execCommand('insertUnorderedList')">• Lista</button>
- <div class="sep"></div>
- <button onclick="aiWrite()" style="background:#0a84ff;color:#fff;font-weight:700">✨ IA Escribir</button>
-</div>
+    <div class="ribbon" id="ribbonDoc">
+        <button onclick="formato('bold')"><b>B</b></button>
+        <button onclick="formato('italic')"><i>I</i></button>
+        <button onclick="formato('underline')"><u>U</u></button>
+        <div class="sep"></div>
+        <select onchange="fuente(this.value)">
+            <option value="3">Normal</option>
+            <option value="5">Grande</option>
+            <option value="7">Muy grande</option>
+        </select>
+        <select onchange="colorTexto(this.value)">
+            <option value="false">Color</option>
+            <option value="#000">Negro</option>
+            <option value="#2b579a">Azul UASLP</option>
+            <option value="#c00">Rojo</option>
+        </select>
+        <div class="sep"></div>
+        <button onclick="alinear('left')">⬅ Alinear Izq</button>
+        <button onclick="alinear('center')">↔ Centrar</button>
+        <button onclick="alinear('right')">➡ Alinear Der</button>
+        <button onclick="lista()">• Lista</button>
+        <div class="sep"></div>
+        <button onclick="escribirIA()" style="background:#0a84ff;color:#fff;font-weight:bold">✨ IA Escribir</button>
+    </div>
 
-<div class="ribbon" id="ribbonSheet" style="display:none">
- <button onclick="addRow()">+ Fila</button><button onclick="addCol()">+ Columna</button><button onclick="addSheet()">+ Hoja</button>
- <div class="sep"></div>
- <button onclick="showChart()">📊 Grafica</button><button onclick="exportExcel()">📗 Excel</button>
-</div>
+    <div class="ribbon" id="ribbonSheet" style="display:none">
+        <button onclick="nuevaHoja()">📄 + Hoja</button>
+        <button onclick="exportarExcel()">📊 Excel</button>
+        <button onclick="exportarPDF()">📕 PDF</button>
+        <button onclick="grafica()">📈 Grafica</button>
+    </div>
 
-<div class="tabs"><div class="tab active" id="tD" onclick="showTab('d')">Document (Word)</div><div class="tab" id="tS" onclick="showTab('s')">Calculation Sheet (Excel)</div></div>
+    <div class="tabs">
+        <div class="tab active" onclick="cambiarPestaña('doc')">📄 Documento</div>
+        <div class="tab" onclick="cambiarPestaña('sheet')">📊 Hoja Cálculo</div>
+    </div>
 
-<div class="content">
- <div id="d"><div id="doc" contenteditable="true">
-  <p><b>Para: Alex Rivera<br>Jefe de Operaciones</b></p>
-  <p><b>Asunto: Resumen Trimestral - Edicion COMPLETA By MASTER S.</b></p>
-  <p>Esta es la version REAL con archivos separados como pediste:</p>
-  <ul><li><b>style.css</b> = interfaz aparte con tu S azul</li><li><b>logic.js</b> = logica aparte con formulas Excel REALES (SUM, AVG, =, etc)</li><li><b>index.html</b> = junta todo</li></ul>
-  <p>Funciones REALES: Word completo, Excel con multiples hojas, graficas, guardado auto, exportar Word/Excel/PDF, IA.</p>
-  <p>Escribe aqui como Word. Todo se guarda solo en este celular.</p>
- </div></div>
- <div id="s" style="display:none; padding:10px">
-  <div id="tables"></div>
-  <div class="sheet-tabs" id="sheetTabs"></div>
-  <div id="chartWrap"><canvas id="myChart" height="120"></canvas><br><button onclick="document.getElementById('chartWrap').style.display='none'">Cerrar grafica</button></div>
- </div>
-</div>
-<script src="logic.js"></script>
+    <div class="content">
+        <div id="doc" contenteditable="true">
+            <p><b>Alex Rivera</b> · Jefe de Operaciones</p>
+            <p><b>Asunto:</b> Resumen Trimestral - Edición COMPLETA BY MASTER S.</p>
+            <br>
+            <p>Esta versión incluye:</p>
+            <ul>
+                <li>Diseño propio, sin marcas de Microsoft</li>
+                <li>Funciona 100% SIN INTERNET</li>
+                <li>Guarda todo automático</li>
+                <li>Compatible con formatos Word, Excel y PDF</li>
+                <li>Adaptado para uso de Tía Mary y la UASLP</li>
+            </ul>
+        </div>
+        <div id="sheet" style="display:none;padding:10px">
+            <div id="hojas"></div>
+            <div id="graficaWrap" style="display:none;margin-top:10px">
+                <canvas id="miGrafica" height="120"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="logic.js"></script>
 </body>
 </html>
