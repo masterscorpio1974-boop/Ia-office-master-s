@@ -2,7 +2,7 @@
 body{background:#f3f2f1;height:100vh;display:flex;flex-direction:column}
 
 .head{background:#2b579a;color:white;padding:12px 20px;display:flex;align-items:center;gap:15px}
-.logo{width:48px;height:48px;border-radius:8px;background:white;color:#2b579a;font-weight:bold;font-size:32px;display:flex;align-items:center;justify-content:center}
+.logo-img{width:48px;height:48px;border-radius:8px;object-fit:cover;background:black}
 .title h1{font-size:22px}
 .title p{opacity:0.9}
 .bright{margin-left:auto;display:flex;gap:8px}

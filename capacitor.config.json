@@ -3,7 +3,7 @@
   "appName": "IA_OFFICE_ASSISTANT",
   "webDir": "src",
   "server": {
-    "androidScheme": "file",
+    "androidScheme": "https",
     "allowNavigation": ["*"],
     "cleartext": true
   },
