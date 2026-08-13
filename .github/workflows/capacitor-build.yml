@@ -8,24 +8,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Instalar Node.js VERSIÓN EXACTA QUE PIDE CAPACITOR
+      - name: Instalar Node.js versión requerida
         uses: actions/setup-node@v4
-        with: 
+        with:
           node-version: '22'
 
-      - name: Instalar Java estable compatible
+      - name: Instalar Java compatible
         uses: actions/setup-java@v4
-        with: 
+        with:
           distribution: 'temurin'
           java-version: '17'
 
       - name: Preparar SDK Android
         uses: android-actions/setup-android@v3
 
-      - name: Instalar dependencias limpias
+      - name: Instalar todas las dependencias
         run: npm ci
 
-      - name: Sincronizar todo al proyecto Android
+      - name: Preparar plataforma Android
+        run: npx cap add android --force
+
+      - name: Sincronizar archivos al proyecto
         run: npx cap sync android
 
       - name: Compilar APK final
@@ -34,7 +37,7 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon
 
-      - name: Guardar APK listo
+      - name: Subir APK terminado
         uses: actions/upload-artifact@v4
         with:
           name: IA_OFFICE_ASSISTANT-MASTER_S
