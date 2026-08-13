@@ -22,10 +22,12 @@ jobs:
       - name: Preparar SDK Android
         uses: android-actions/setup-android@v3
 
-      - name: Instalar todas las dependencias
-        run: npm ci
+      - name: Instalar TODAS las dependencias INCLUIDA la plataforma Android
+        run: |
+          npm ci
+          npm install @capacitor/android --save
 
-      - name: Agregar plataforma Android DE FORMA SEGURA
+      - name: Agregar plataforma Android
         run: npx cap add android
 
       - name: Sincronizar archivos al proyecto
