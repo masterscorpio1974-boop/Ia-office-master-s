@@ -6,37 +6,45 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - name: 📥 Obtener código
+        uses: actions/checkout@v4
 
-      - name: Node.js 22
+      - name: 🛠️ Instalar Node.js y herramientas
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: 20
 
-      - name: Java 17 estable
+      - name: ☕ Instalar Java para Android
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: SDK Android oficial
-        uses: android-actions/setup-android@v3
-
-      - name: Instalar paquetes y ajustar automáticamente
-        run: npm install
-
-      - name: Crear y sincronizar Capacitor
+      - name: 📦 Instalar Capacitor y dependencias
         run: |
-          npx cap add android
-          npx cap sync android
+          npm install -g @capacitor/cli @capacitor/android
+          npm install
 
-      - name: Compilar APK Depuración
+      - name: 🧪 Verificar estructura de archivos
+        run: |
+          ls -la src/
+          test -f src/index.html && echo "✅ index.html presente"
+          test -f src/style.css && echo "✅ style.css presente"
+          test -f src/logic.js && echo "✅ logic.js presente"
+
+      - name: 🤖 Agregar plataforma Android
+        run: npx cap add android
+
+      - name: 🔧 Sincronizar archivos al proyecto Android
+        run: npx cap sync android
+
+      - name: 📲 Compilar APK de depuración
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon
+          ./gradlew assembleDebug
 
-      - name: Guardar APK generado
+      - name: 📤 Subir APK generado
         uses: actions/upload-artifact@v4
         with:
           name: IA_OFFICE_ASSISTANT-MASTER_S
