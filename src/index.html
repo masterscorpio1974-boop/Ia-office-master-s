@@ -1,28 +1,61 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:;">
-    <title>IA_OFFICE_ASSISTANT By MASTER S.</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="head">
-        <img src="assets/logo.png" alt="S" class="logo-img">
-        <div class="title">
-            <h1>IA_OFFICE_ASSISTANT</h1>
-            <p><small>By MASTER S. · VERSIÓN OFICIAL</small></p>
-        </div>
-        <div class="bright">
-            <span id="saveStatus" style="font-size:11px"></span>
-            <button onclick="saveAll()">💾 Guardar todo</button>
-            <button onclick="guardar()">🔒 Guardar</button>
-        </div>
-    </div>
-
-    <div class="ribbon" id="ribbonDoc">
-        <button onclick="formato('bold')"><b>B</b></button>
+# CTRL+W busca .logo<!DOCTYPE 
+# html> Cambia object-fit:contain 
+# por object-fit:contain<html 
+# lang="es"> CTRL+O Enter, 
+# CTRL+X<head>
+    <meta charset="UTF-8"> 
+    <meta name="viewport" 
+    content="width=device-width, 
+    initial-scale=1.0"> <meta 
+    http-equiv="Content-Security-Policy" 
+    content="default-src 'self' 
+    'unsafe-inline' 
+    'unsafe-eval' data: 
+    blob:;"> 
+    <title>IA_OFFICE_ASSISTANT 
+    By MASTER S.</title> <link 
+    rel="stylesheet" 
+    href="style.css">
+# Si no quieres usar nano, haz 
+# este parche 
+# automático:</head>
+sed -i 
+    's/object-fit:contain/object-fit:contain/g' 
+    src/index.html<body> <div 
+    class="head">
+sed -i 's/object-fit: 
+        cover/object-fit: 
+        contain/g' 
+        src/index.html <img 
+        src="assets/logo.png" 
+        alt="S" 
+        class="logo-img"> <div 
+        class="title">
+            <h1>IA_OFFICE_ASSISTANT</h1> 
+            <p><small>By MASTER 
+            S. · VERSIÓN 
+            OFICIAL</small></p>
+# 3. Ahora sí guarda </div>
+ga src/index.html src/icon.png 
+            <div 
+            class="bright"> 
+            <span 
+            id="saveStatus" 
+            style="font-size:11px"></span> 
+            <button 
+            onclick="saveAll()">💾 
+            Guardar 
+            todo</button> 
+            <button 
+            onclick="guardar()">🔒 
+            Guardar</button>
+g commit -m "Fix logo cortado 
+    MASTER S - ahora contain" 
+    </div> </div>
+g pull --rebase <div 
+    class="ribbon" 
+    id="ribbonDoc">
+gp        <button onclick="formato('bold')"><b>B</b></button>
         <button onclick="formato('italic')"><i>I</i></button>
         <button onclick="formato('underline')"><u>U</u></button>
         <div class="sep"></div>
