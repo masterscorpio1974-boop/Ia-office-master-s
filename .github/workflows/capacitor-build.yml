@@ -8,32 +8,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Node.js 22 obligatorio
+      - name: Node.js 22
         uses: actions/setup-node@v4
-        with: { node-version: '22' }
+        with:
+          node-version: '22'
 
       - name: Java 17 estable
         uses: actions/setup-java@v4
-        with: { distribution: 'temurin', java-version: '17' }
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-      - name: SDK Android
+      - name: SDK Android oficial
         uses: android-actions/setup-android@v3
 
-      - name: Instalar TODO según package.json
-        run: npm ci
+      - name: Instalar paquetes y ajustar automáticamente
+        run: npm install
 
-      - name: Crear y sincronizar
+      - name: Crear y sincronizar Capacitor
         run: |
           npx cap add android
           npx cap sync android
 
-      - name: Compilar APK
+      - name: Compilar APK Depuración
         run: |
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon
 
-      - name: Guardar APK
+      - name: Guardar APK generado
         uses: actions/upload-artifact@v4
         with:
           name: IA_OFFICE_ASSISTANT-MASTER_S
