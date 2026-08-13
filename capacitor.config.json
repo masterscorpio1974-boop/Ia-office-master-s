@@ -1,11 +1,10 @@
 {
-  "appId": "com.iaoffice.masters",
-  "appName": "ia-office-master-s",
-  "webDir": "www",
+  "appId": "com.masterscorpio.iaofficeassistant",
+  "appName": "IA_OFFICE_ASSISTANT",
+  "webDir": "src",
   "server": {
     "androidScheme": "https",
     "allowNavigation": ["*"],
     "cleartext": true
   }
 }
-
