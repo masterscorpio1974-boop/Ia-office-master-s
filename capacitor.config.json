@@ -3,8 +3,16 @@
   "appName": "IA_OFFICE_ASSISTANT",
   "webDir": "src",
   "server": {
-    "androidScheme": "https",
+    "androidScheme": "file",
     "allowNavigation": ["*"],
     "cleartext": true
+  },
+  "android": {
+    "buildOptions": {
+      "keystorePath": "",
+      "keystoreAlias": "",
+      "keystorePassword": "",
+      "keystoreAliasPassword": ""
+    }
   }
 }
