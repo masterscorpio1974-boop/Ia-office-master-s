@@ -1,7 +1,7 @@
 {
   "appId": "com.masterscorpio.iaofficeassistant",
   "appName": "IA_OFFICE_ASSISTANT",
-  "webDir": "src",
+  "webDir": ".",
   "server": {
     "androidScheme": "https",
     "allowNavigation": ["*"],
