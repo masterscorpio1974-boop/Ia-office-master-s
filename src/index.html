@@ -1,118 +1,169 @@
-# CTRL+W busca .logo<!DOCTYPE 
-# html> Cambia object-fit:contain 
-# por object-fit:contain<html 
-# lang="es"> CTRL+O Enter, 
-# CTRL+X<head>
-    <meta charset="UTF-8"> 
-    <meta name="viewport" 
-    content="width=device-width, 
-    initial-scale=1.0"> <meta 
-    http-equiv="Content-Security-Policy" 
-    content="default-src 'self' 
-    'unsafe-inline' 
-    'unsafe-eval' data: 
-    blob:;"> 
-    <title>IA_OFFICE_ASSISTANT 
-    By MASTER S.</title> <link 
-    rel="stylesheet" 
-    href="style.css">
-# Si no quieres usar nano, haz 
-# este parche 
-# automático:</head>
-sed -i 
-    's/object-fit:contain/object-fit:contain/g' 
-    src/index.html<body> <div 
-    class="head">
-sed -i 's/object-fit: 
-        cover/object-fit: 
-        contain/g' 
-        src/index.html <img 
-        src="assets/logo.png" 
-        alt="S" 
-        class="logo-img"> <div 
-        class="title">
-            <h1>IA_OFFICE_ASSISTANT</h1> 
-            <p><small>By MASTER 
-            S. · VERSIÓN 
-            OFICIAL</small></p>
-# 3. Ahora sí guarda </div>
-ga src/index.html src/icon.png 
-            <div 
-            class="bright"> 
-            <span 
-            id="saveStatus" 
-            style="font-size:11px"></span> 
-            <button 
-            onclick="saveAll()">💾 
-            Guardar 
-            todo</button> 
-            <button 
-            onclick="guardar()">🔒 
-            Guardar</button>
-g commit -m "Fix logo cortado 
-    MASTER S - ahora contain" 
-    </div> </div>
-g pull --rebase <div 
-    class="ribbon" 
-    id="ribbonDoc">
-gp        <button onclick="formato('bold')"><b>B</b></button>
-        <button onclick="formato('italic')"><i>I</i></button>
-        <button onclick="formato('underline')"><u>U</u></button>
-        <div class="sep"></div>
-        <select onchange="fuente(this.value)">
+# CTRL+W busca .logo :DOCTYPE
+# html> Cambia object-fit:contain
+# por object-fit:contain<html
+# lang="es"> CTRL + O Enter.
+# CTRL+X <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:;">
+<title>OFFICE_ASSISTANT By MASTER S. </title>
+<link rel="stylesheet" href="style.css">
+# Si no quieres usar nano, haz
+# este parche
+# automático: </head>
+</head>
+<body>
+<div class="head">
+    <div class="logo-img">
+        <img src="assets/logo.png" alt="S">
+    </div>
+    <div class="title">
+        <h1>OFFICE_ASSISTANT</h1>
+        <p><small>By MASTER S. · VERSIÓN OFICIAL</small></p>
+    </div>
+</div>
+
+# Barra de estado y guardado seguro local responsiva
+<div style="padding: 10px; background: #f5f5f5; border-bottom: 1px solid #ddd;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <span id="saveStatus" style="font-size:11px; font-weight: bold; color: #555;">LISTO - OFFLINE SIN CONEXIONES EXTERNAS</span>
+        <button onclick="saveAll()" style="background:#e0e0e0; border:1px solid #ccc; padding:6px 12px; border-radius:4px; cursor:pointer; font-weight:bold; display: flex; align-items: center; gap: 4px;">🔒 Guardar</button>
+    </div>
+</div>
+
+# Barra de herramientas principal (Procesador de Texto)
+<div class="ribbon" id="ribbonDoc" style="padding: 10px; background: #fff; border-bottom: 1px solid #ccc;">
+    <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 10px;">
+        <button onclick="formato('bold')" style="padding: 6px 10px;"><b>B</b></button>
+        <button onclick="formato('italic')" style="padding: 6px 10px;"><i>I</i></button>
+        <button onclick="formato('underline')" style="padding: 6px 10px;"><u>U</u></button>
+        <div style="width: 1px; height: 20px; background: #ccc;"></div>
+        
+        <select onchange="cambiarTamanoFuente(this.value)" style="padding: 4px;">
             <option value="3">Normal</option>
             <option value="5">Grande</option>
             <option value="7">Muy grande</option>
         </select>
-        <select onchange="colorTexto(this.value)">
+        
+        <select onchange="cambiarColorTexto(this.value)" style="padding: 4px;">
             <option value="false">Color</option>
-            <option value="#000">Negro</option>
+            <option value="#000000">Negro</option>
             <option value="#2b579a">Azul Master</option>
-            <option value="#c00">Rojo</option>
+            <option value="#cc0000">Rojo</option>
         </select>
-        <div class="sep"></div>
-        <button onclick="alinear('left')">⬅ Alinear Izq</button>
-        <button onclick="alinear('center')">↔ Centrar</button>
-        <button onclick="alinear('right')">➡ Alinear Der</button>
-        <button onclick="lista()">• Lista</button>
-        <div class="sep"></div>
-        <button onclick="escribirIA()" style="background:#0a84ff;color:#fff;font-weight:bold">✨ IA Escribir</button>
+    </div>
+    
+    <div class="format-blocks-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(75px, 1fr)); gap: 6px; width: 100%; max-width: 100%; box-sizing: border-box;">
+        <button onclick="alinear('justifyLeft')" style="background:#e0e0e0; border:none; padding:8px 4px; border-radius:4px; font-family:sans-serif; cursor:pointer; text-align:center; font-size: 11px;">
+            <span style="display:block; font-size:12px; margin-bottom: 2px;">←</span><b>Alinear Izq</b>
+        </button>
+        <button onclick="alinear('justifyCenter')" style="background:#e0e0e0; border:none; padding:8px 4px; border-radius:4px; font-family:sans-serif; cursor:pointer; text-align:center; font-size: 11px;">
+            <span style="display:block; font-size:12px; margin-bottom: 2px;">↔</span><b>Centrar</b>
+        </button>
+        <button onclick="alinear('justifyRight')" style="background:#e0e0e0; border:none; padding:8px 4px; border-radius:4px; font-family:sans-serif; cursor:pointer; text-align:center; font-size: 11px;">
+            <span style="display:block; font-size:12px; margin-bottom: 2px;">→</span><b>Alinear Der</b>
+        </button>
+        <button onclick="ejecutarComando('insertUnorderedList')" style="background:#e0e0e0; border:none; padding:8px 4px; border-radius:4px; font-family:sans-serif; cursor:pointer; text-align:center; font-size: 11px;">
+            <span style="display:block; font-size:12px; margin-bottom: 2px;">•</span><b>Lista</b>
+        </button>
+    </div>
+</div>
+
+# Barra de herramientas (Hoja de Cálculo)
+<div class="ribbon" id="ribbonSheet" style="display:none; padding: 10px; background: #fff; border-bottom: 1px solid #ccc;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); gap: 6px; width: 100%;">
+        <button onclick="insertarTablaCalificaciones()" style="padding: 8px 4px; font-weight: bold;">+ Hoja</button>
+        <button onclick="exportarExcel()" style="padding: 8px 4px; font-weight: bold;">Excel</button>
+        <button onclick="exportarPDF()" style="padding: 8px 4px; font-weight: bold;">PDF</button>
+        <button onclick="grafica()" style="padding: 8px 4px; font-weight: bold;">Grafica</button>
+    </div>
+</div>
+
+<div class="tabs" style="margin-top:10px;">
+    <div class="tab active" id="tabDoc" onclick="cambiarPestana('doc')">Documento</div>
+    <div class="tab" id="tabSheet" onclick="cambiarPestana('sheet')">Hoja Cálculo</div>
+</div>
+
+<div class="content" style="padding: 10px; box-sizing: border-box;">
+    <!-- SECCIÓN PROCESADOR DE TEXTO -->
+    <div id="doc" contenteditable="true" style="outline: none; min-height: 250px; background: #fff; padding: 10px; border: 1px solid #eee; border-radius: 4px;">
+        <p><b>Alex Rivera</b> · Jefe de Operaciones</p>
+        <p><b>Asunto:</b> Resumen Trimestral - Edición COMPLETA BY MASTER S.</p>
+        <br>
+        <p>Esta versión incluye:</p>
+        <ul>
+            <li>Diseño propio, independiente y autónomo</li>
+            <li>Funciona 100% SIN INTERNET</li>
+            <li>Guarda todo automático en el dispositivo</li>
+            <li>Compatible con formatos estándar de texto y hojas de datos</li>
+            <li>Adaptado para uso profesional y personal</li>
+        </ul>
     </div>
 
-    <div class="ribbon" id="ribbonSheet" style="display:none">
-        <button onclick="nuevaHoja()">📄 + Hoja</button>
-        <button onclick="exportarExcel()">📊 Excel</button>
-        <button onclick="exportarPDF()">📕 PDF</button>
-        <button onclick="grafica()">📈 Grafica</button>
-    </div>
-
-    <div class="tabs">
-        <div class="tab active" onclick="cambiarPestaña('doc')">📄 Documento</div>
-        <div class="tab" onclick="cambiarPestaña('sheet')">📊 Hoja Cálculo</div>
-    </div>
-
-    <div class="content">
-        <div id="doc" contenteditable="true">
-            <p><b>Alex Rivera</b> · Jefe de Operaciones</p>
-            <p><b>Asunto:</b> Resumen Trimestral - Edición COMPLETA BY MASTER S.</p>
-            <br>
-            <p>Esta versión incluye:</p>
-            <ul>
-                <li>Diseño propio, sin marcas de Microsoft</li>
-                <li>Funciona 100% SIN INTERNET</li>
-                <li>Guarda todo automático</li>
-                <li>Compatible con formatos Word, Excel y PDF</li>
-                <li>Adaptado para uso profesional y personal</li>
-            </ul>
+    <!-- SECCIÓN HOJA DE CÁLCULO -->
+    <div id="sheet" style="display:none;">
+        <div id="hojas" style="background:#fff; border:1px solid #ccc; padding:15px; min-height:120px; border-radius:4px; color:#000; font-family:sans-serif; overflow-x: auto;">
+            <p id="indicadorVacio" style="color:#666; font-size:13px; margin:0;">Presiona el botón <b>"+ Hoja"</b> arriba para desplegar un lienzo de datos local.</p>
         </div>
-        <div id="sheet" style="display:none;padding:10px">
-            <div id="hojas"></div>
-            <div id="graficaWrap" style="display:none;margin-top:10px">
-                <canvas id="miGrafica" height="120"></canvas>
-            </div>
+        
+        <!-- LIENZO DE CANVAS TOTALMENTE INTEGRADO PARA GRAFICAR -->
+        <div id="graficaWrap" style="display:none; margin-top:15px; background:#fff; border:1px solid #ccc; padding:10px; border-radius:4px;">
+            <div style="font-weight:bold; font-size:12px; margin-bottom:8px; font-family:sans-serif; color:#333;">Visualización Estadística de Datos Local</div>
+            <canvas id="miGrafica" width="300" height="150" style="width:100%; height:auto; background:#fafafa; border:1px solid #eee;"></canvas>
         </div>
     </div>
+</div>
 
-    <script src="logic.js"></script>
-</body>
-</html>
+<!-- LÓGICA INTEGRADA TOTALMENTE OFFLINE -->
+<script>
+    function cambiarPestana(tipo) {
+        const docView = document.getElementById('doc');
+        const sheetView = document.getElementById('sheet');
+        const ribbonDoc = document.getElementById('ribbonDoc');
+        const ribbonSheet = document.getElementById('ribbonSheet');
+        const tabDoc = document.getElementById('tabDoc');
+        const tabSheet = document.getElementById('tabSheet');
+
+        if (tipo === 'doc') {
+            docView.style.display = 'block';
+            ribbonDoc.style.display = 'block';
+            sheetView.style.display = 'none';
+            ribbonSheet.style.display = 'none';
+            tabDoc.classList.add('active');
+            tabSheet.classList.remove('active');
+        } else {
+            docView.style.display = 'none';
+            ribbonDoc.style.display = 'none';
+            sheetView.style.display = 'block';
+            ribbonSheet.style.display = 'block';
+            tabDoc.classList.remove('active');
+            tabSheet.classList.add('active');
+        }
+    }
+
+    function formato(comando) { document.execCommand(comando, false, null); }
+    function alinear(direccion) { document.execCommand(direccion, false, null); }
+    function ejecutarComando(comando) { document.execCommand(comando, false, null); }
+    function cambiarTamanoFuente(size) { document.execCommand('fontSize', false, size); }
+    function cambiarColorTexto(color) { if(color !== "false") document.execCommand('foreColor', false, color); }
+
+    // Genera la tabla interactiva y oculta la advertencia inicial
+    function insertarTablaCalificaciones() {
+        const contenedor = document.getElementById('hojas');
+        document.getElementById('graficaWrap').style.display = 'none'; // Resetea gráfica anterior si la hay
+        contenedor.innerHTML = `
+            <div style="font-weight:bold; margin-bottom:10px; font-size:14px; color:#000;">Nueva hoja de registro</div>
+            <table id="tablaDatos" border="1" style="width:100%; border-collapse:collapse; text-align:center; background:#fff; color:#000; border-color:#ccc; font-size:13px;">
+                <tr style="background:#f2f2f2; font-weight:bold;">
+                    <th style="padding:6px; border:1px solid #ccc;">Datos</th>
+                    <th style="border:1px solid #ccc;">Muestra 1</th>
+                    <th style="border:1px solid #ccc;">Muestra 2</th>
+                </tr>
+                <tr>
+                    <td contenteditable="true" style="text-align:left; padding:6px; border:1px solid #ccc;">Fila A</td>
+                    <td contenteditable="true" class="val-num" style="border:1px solid #ccc;">8</td>
+                    <td contenteditable="true" class="val-num" style="border:1px solid #ccc;">6</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true" style="text-align:left; padding:6px; border:1px solid #ccc;">Fila B</td>
+                    <td contenteditable="true" class="val-num" style="border:1px solid #ccc;">4</td>
