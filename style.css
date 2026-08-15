@@ -1,14 +1,60 @@
-*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#fff}
-.h{background:#2b579a;color:#fff;padding:10px;display:flex;align-items:center;gap:12px}
-.logo-box{width:48px;height:48px;background:#000;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-weight:bold;font-size:26px;color:#fff}
-.logo-box img{width:100%;height:100%;object-fit:cover}
-.bar{background:#eee;padding:6px 8px;display:flex;justify-content:space-between;border-bottom:1px solid #ccc;font-size:13px}
-.bar button{padding:6px 10px;border-radius:6px;border:1px solid #999;background:#fff;font-weight:bold}
-.ribbon{background:#f3f3f3;padding:6px;border-bottom:1px solid #ccc}
-.ribbon button{font-size:13px;padding:5px 8px;margin:2px;border:1px solid #bbb;background:#fff;border-radius:6px}
-.eye{background:#2b579a!important;color:#fff!important}
-.c-dot{width:20px;height:20px;border-radius:50%;vertical-align:middle;border:1px solid #999!important}
-.tabs{display:flex;background:#ddd}.tab{flex:1;padding:10px;text-align:center;border-right:1px solid #bbb}
-.tab.active{background:#fff;font-weight:bold;border-bottom:3px solid #2b579a}
-#docView{min-height:400px;padding:12px;border:1px solid #ddd;margin:8px;outline:none}
-#tablaDatos{width:100%;border-collapse:collapse}#tablaDatos td,#tablaDatos th{border:1px solid #ccc;padding:6px;font-size:13px}#tablaDatos th{background:#eee}
+/* --- DISEÑO BASE Y RESET --- */
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+body { background-color: #f3f2f1; color: #323130; overflow: hidden; height: 100vh; }
+
+#app-container { display: flex; flex-direction: column; height: 100vh; }
+
+/* --- ENCABEZADO DINÁMICO --- */
+.office-header { display: flex; align-items: center; padding: 10px 16px; background-color: #2b579a; color: white; transition: background 0.3s ease; }
+.logo-box { width: 36px; height: 36px; background: rgba(255,255,255,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; margin-right: 12px; }
+.logo-box img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
+.header-info h1 { font-size: 16px; font-weight: 600; }
+.header-info small { font-size: 11px; opacity: 0.8; }
+.status-indicator { margin-left: auto; font-size: 11px; background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 4px; font-family: monospace; }
+
+/* --- CINTA DE OPCIONES (RIBBON) --- */
+.office-ribbon { background: #ffffff; border-bottom: 1px solid #edebe9; padding: 6px; overflow-x: auto; display: flex; white-space: nowrap; }
+.ribbon-group { display: none; align-items: center; gap: 4px; }
+.office-ribbon button { background: #f3f2f1; border: 1px solid #ced4da; padding: 6px 10px; border-radius: 4px; font-size: 13px; font-weight: 500; color: #201f1e; cursor: pointer; }
+.office-ribbon button:active { background: #c8c6c4; }
+.separator { width: 1px; height: 20px; background: #edebe9; margin: 0 4px; display: inline-block; }
+.c-dot { width: 22px; height: 22px; border-radius: 50%; padding: 0 !important; border: 1px solid #a19f9d !important; }
+.btn-danger { background: #fde7e9 !important; color: #a80000 !important; border-color: #f3b1b3 !important; }
+
+/* --- CAMBIO DE COLORES SEGÚN EL MODO --- */
+[data-modo="word"] .office-header { background-color: #2b579a; }
+[data-modo="word"] #tools-word { display: flex; }
+[data-modo="word"] #panel-word { display: block; }
+
+[data-modo="excel"] .office-header { background-color: #107c41; }
+[data-modo="excel"] #tools-excel { display: flex; }
+[data-modo="excel"] #panel-excel { display: flex; }
+
+/* --- ÁREA DE TRABAJO (WORKSPACE) --- */
+.office-workspace { flex: 1; overflow: hidden; position: relative; background: #f3f2f1; }
+.workspace-panel { display: none; width: 100%; height: 100%; overflow-y: auto; padding: 16px; box-sizing: border-box; }
+
+/* Estilo Hoja de Word */
+#panel-word { background: white; max-width: 800px; margin: 0 auto; box-shadow: 0 2px 8px rgba(0,0,0,0.1); outline: none; font-size: 15px; line-height: 1.6; }
+
+/* Estilo Matriz de Excel */
+#panel-excel { flex-direction: column; padding: 0; background: #fff; }
+.excel-scroll-wrapper { width: 100%; flex: 1; overflow: auto; }
+.excel-grid { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; }
+.excel-grid th { background: #f3f2f1; border: 1px solid #cdc9c5; padding: 6px; text-align: center; font-weight: 600; color: #323130; position: sticky; top: 0; z-index: 10; }
+.excel-grid th:first-child { left: 0; z-index: 11; background: #f3f2f1; width: 40px; }
+.excel-grid td { border: 1px solid #d2d0ce; padding: 0; }
+.excel-grid td:first-child { background: #f3f2f1; text-align: center; font-weight: 600; position: sticky; left: 0; z-index: 5; border-right: 2px solid #a19f9d; }
+.excel-grid input { width: 100%; border: none; padding: 8px 6px; box-sizing: border-box; font-family: monospace; font-size: 13px; color: #323130; background: transparent; }
+.excel-grid input:focus { background: #e2f1e5; outline: 2px solid #107c41; outline-offset: -2px; z-index: 6; position: relative; }
+
+/* Contenedor de la gráfica */
+#graficaContainer { background: #faf9f8; border-top: 2px solid #edebe9; padding: 12px; height: 180px; display: none; align-items: flex-end; justify-content: center; gap: 8px; }
+.bar-chart { background: #107c41; display: inline-block; width: 35px; min-height: 4px; transition: height 0.3s ease; border-radius: 4px 4px 0 0; text-align: center; color: white; font-size: 10px; font-weight: bold; padding-top: 4px; }
+
+/* --- PESTAÑAS INFERIORES --- */
+.office-tabs { height: 56px; background: #ffffff; border-top: 1px solid #edebe9; display: flex; }
+.tab-button { flex: 1; background: none; border: none; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: #605e5c; cursor: pointer; gap: 2px; }
+.tab-icon { font-size: 18px; }
+#tab-word.active { color: #2b579a; background: #eff6fc; font-weight: 600; border-top: 3px solid #2b579a; }
+#tab-excel.active { color: #107c41; background: #f0f9f1; font-weight: 600; border-top: 3px solid #107c41; }
