@@ -47,13 +47,12 @@ function aplicarTamano(tam) {
     guardarSeleccion();
 }
 
-// --- PARCHE 1: ESTE ES EL ARREGLO DEL FANTASMA ---
+// --- PARCHE 1: ARREGLO DEL FANTASMA ---
 function crearNuevo() {
     if (confirm("¿Borrar todo y empezar un documento nuevo?")) {
         const nuevoHTML = "<p>Escribe aquí tu documento...</p>";
         document.getElementById('docView').innerHTML = nuevoHTML;
         rangoGuardado = null;
-        // Borra el guardado real para que no regrese al cerrar y abrir
         localStorage.setItem('o_doc', nuevoHTML);
         notificarStatus("Nuevo documento creado");
     }
@@ -147,7 +146,6 @@ function generarGraficaLocal() {
     });
 }
 
-// --- PARCHE 2: SEPARAR COPIAR DE DOCUMENTO Y DE HOJA ---
 function copiarDocumento() {
     const texto = document.getElementById('docView').innerText;
     navigator.clipboard.writeText(texto).then(() => {
@@ -165,9 +163,36 @@ function exportarExcel() {
     navigator.clipboard.writeText(txt).then(() => { notificarStatus("¡Tabla copiada! Pégala en Excel."); });
 }
 
+// --- PARCHE PDF LIMPIO ---
 function exportarPDF() {
-    notificarStatus("Generando PDF...");
-    window.print();
+    notificarStatus("Generando PDF limpio...");
+    const rDoc = document.getElementById('ribbonDoc');
+    const rSheet = document.getElementById('ribbonSheet');
+    const tabs = document.querySelector('.tabs');
+    const status = document.querySelector('.status-bar');
+    const head = document.querySelector('.head');
+
+    rDoc.style.display = 'none';
+    rSheet.style.display = 'none';
+    tabs.style.display = 'none';
+    status.style.display = 'none';
+    head.style.display = 'none';
+
+    setTimeout(() => {
+        window.print();
+        setTimeout(() => {
+            head.style.display = '';
+            tabs.style.display = '';
+            status.style.display = '';
+            const docView = document.getElementById('docView');
+            if (docView.style.display!== 'none') {
+                rDoc.style.display = 'block';
+            } else {
+                rSheet.style.display = 'block';
+            }
+            notificarStatus("PDF listo");
+        }, 500);
+    }, 300);
 }
 
 function saveAll() {
@@ -182,10 +207,8 @@ function notificarStatus(msg) {
     setTimeout(() => { if(el) el.innerText = "LISTO - OFFLINE SIN CONEXIONES EXTERNAS"; }, 2500);
 }
 
-// --- PARCHE 3: CARGA INICIAL CORRECTA ---
 window.onload = function() {
     const rd = localStorage.getItem('o_doc');
     if (rd) document.getElementById('docView').innerHTML = rd;
-    // Asegura que al abrir siempre inicie en Documento y con los botones correctos
     cambiarVista('doc');
 }
