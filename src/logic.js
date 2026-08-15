@@ -135,8 +135,10 @@ window.onload = function() {
     const rDoc = localStorage.getItem('master_office_doc_data');
     if (rDoc) document.getElementById('docView').innerHTML = rDoc;
     const rSheet = localStorage.getItem('master_office_sheet_data');
-    if (rSheet) {
-        document.getElementById('contenedorTabla').innerHTML = `<div style="font-weight:bold; margin-bottom:10px; font-size:14px; color:#000;">Registro de Evaluaciones Académicas (Restaurado)</div><table id="tablaDatos">${rSheet}</table>`;
-        document.querySelectorAll('.p1, .p2').forEach(celda => { celda.setAttribute('oninput', 'calcularFila(this)'); });
-    }
-}
+    if (rSheet) document.getElementById('contenedorTabla').innerHTML = `<div style="font-weight:bold;margin-bottom:10px;font-size:14px;color:#000;">Registro de Evaluaciones Académicas (Restaurado)</div><table id="tablaDatos">${rSheet}</table>`;
+    }}
+
+
+function cambiarColorRapido(c){document.execCommand('foreColor',false,c);}
+function cambiarTamanoRapido(s){document.execCommand('fontSize',false,s);}
+
