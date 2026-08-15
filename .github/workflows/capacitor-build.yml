@@ -2,7 +2,8 @@ name: Build IA_OFFICE_ASSISTANT APK
 
 on:
   workflow_dispatch:
- jobs:
+
+jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
@@ -28,14 +29,14 @@ on:
           npm install
           npm install @capacitor/android --save
 
-      - name: 🔍 Verificar estructura RAIZ
+      - name: 📁 Crear www y copiar archivos raiz
         run: |
-          ls -la
-          test -f index.html && echo "✅ index.html presente"
-          test -f logic.js && echo "✅ logic.js presente"
-          test -f style.css && echo "✅ style.css presente"
-          test -f icon.png && echo "✅ icon.png presente"
-          test -f capacitor.config.json && echo "✅ config presente"
+          mkdir -p www
+          cp index.html www/
+          cp logic.js www/
+          cp style.css www/
+          cp icon.png www/
+          ls -la www/
 
       - name: 🤖 Agregar plataforma Android
         run: |
