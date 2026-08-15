@@ -8,8 +8,8 @@ function guardarSeleccion() {
 }
 
 function restaurarSeleccion() {
-    const sel = window.getSelection();
     if (rangoGuardado) {
+        const sel = window.getSelection();
         sel.removeAllRanges();
         sel.addRange(rangoGuardado);
     }
@@ -32,16 +32,45 @@ function cambiarVista(vista) {
 function aplicarEstilo(cmd) {
     restaurarSeleccion();
     document.execCommand(cmd, false, null);
+    guardarSeleccion();
 }
 
 function aplicarColor(color) {
     restaurarSeleccion();
     document.execCommand('foreColor', false, color);
+    guardarSeleccion();
 }
 
 function aplicarTamano(tam) {
     restaurarSeleccion();
     document.execCommand('fontSize', false, tam);
+    guardarSeleccion();
+}
+
+function crearNuevo() {
+    if (confirm("¿Borrar todo y empezar un documento nuevo?")) {
+        document.getElementById('docView').innerHTML = "<p>Escribe aquí tu documento...</p>";
+        rangoGuardado = null;
+        notificarStatus("Nuevo documento creado");
+    }
+}
+
+function cargarDatosGuardados() {
+    const rSheet = localStorage.getItem('o_sheet');
+    if (!rSheet) {
+        alert("No hay datos de tablas guardados localmente. Crea una '+ Hoja' primero.");
+        return;
+    }
+    cambiarVista('sheet');
+    document.getElementById('contenedorTabla').innerHTML = `
+        <div style="font-weight:bold;margin-bottom:10px;font-size:14px;color:#000;">Registro de Evaluaciones Académicas (Restaurado)</div>
+        <table id="tablaDatos">${rSheet}</table>`;
+    
+    document.querySelectorAll('.p1, .p2').forEach(c => {
+        c.setAttribute('oninput', 'calcularFila(this)');
+    });
+    generarGraficaLocal();
+    notificarStatus("Datos recuperados con éxito");
 }
 
 function insertarNuevaHoja() {
@@ -51,30 +80,30 @@ function insertarNuevaHoja() {
         <table id="tablaDatos">
             <thead>
                 <tr>
-                    <th style="text-align:left;">Alumno</th>
-                    <th>Parcial 1</th>
-                    <th>Parcial 2</th>
-                    <th>Promedio Final</th>
+                    <th style="text-align:left; border:1px solid #ccc; padding:6px; background:#f2f2f2;">Alumno</th>
+                    <th style="border:1px solid #ccc; padding:6px; background:#f2f2f2;">Parcial 1</th>
+                    <th style="border:1px solid #ccc; padding:6px; background:#f2f2f2;">Parcial 2</th>
+                    <th style="border:1px solid #ccc; padding:6px; background:#f2f2f2;">Promedio Final</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td contenteditable="true" style="text-align:left;">Juan Pérez</td>
-                    <td contenteditable="true" class="p1" oninput="calcularFila(this)">8</td>
-                    <td contenteditable="true" class="p2" oninput="calcularFila(this)">7</td>
-                    <td class="res" style="font-weight:bold;">7.5</td>
+                    <td contenteditable="true" style="text-align:left; border:1px solid #ccc; padding:6px;">Juan Pérez</td>
+                    <td contenteditable="true" class="p1" oninput="calcularFila(this)" style="border:1px solid #ccc;">8</td>
+                    <td contenteditable="true" class="p2" oninput="calcularFila(this)" style="border:1px solid #ccc;">7</td>
+                    <td class="res" style="font-weight:bold; border:1px solid #ccc;">7.5</td>
                 </tr>
                 <tr>
-                    <td contenteditable="true" style="text-align:left;">María Gómez</td>
-                    <td contenteditable="true" class="p1" oninput="calcularFila(this)">10</td>
-                    <td contenteditable="true" class="p2" oninput="calcularFila(this)">9</td>
-                    <td class="res" style="font-weight:bold;">9.5</td>
+                    <td contenteditable="true" style="text-align:left; border:1px solid #ccc; padding:6px;">María Gómez</td>
+                    <td contenteditable="true" class="p1" oninput="calcularFila(this)" style="border:1px solid #ccc;">10</td>
+                    <td contenteditable="true" class="p2" oninput="calcularFila(this)" style="border:1px solid #ccc;">9</td>
+                    <td class="res" style="font-weight:bold; border:1px solid #ccc;">9.5</td>
                 </tr>
                 <tr>
-                    <td contenteditable="true" style="text-align:left;">Carlos López</td>
-                    <td contenteditable="true" class="p1" oninput="calcularFila(this)">6</td>
-                    <td contenteditable="true" class="p2" oninput="calcularFila(this)">5</td>
-                    <td class="res" style="font-weight:bold; color:red;">5.5</td>
+                    <td contenteditable="true" style="text-align:left; border:1px solid #ccc; padding:6px;">Carlos López</td>
+                    <td contenteditable="true" class="p1" oninput="calcularFila(this)" style="border:1px solid #ccc;">6</td>
+                    <td contenteditable="true" class="p2" oninput="calcularFila(this)" style="border:1px solid #ccc;">5</td>
+                    <td class="res" style="font-weight:bold; color:red; border:1px solid #ccc;">5.5</td>
                 </tr>
             </tbody>
         </table>`;
@@ -96,19 +125,19 @@ function generarGraficaLocal() {
     });
     if (p.length === 0) return; document.getElementById('graficaWrap').style.display = 'block';
     const can = document.getElementById('miGrafica'), ctx = can.getContext('2d'); ctx.clearRect(0, 0, can.width, can.height);
-    const pad = 25, esp = 15, am = can.width - (pad * 2), al = can.height - (pad * 2) - 10, ab = (am - (esp * (p.length - 1))) / p.length;
+    const pad = 25, espacio = 15, am = can.width - (pad * 2), al = can.height - (pad * 2) - 10, ab = (am - (espacio * (p.length - 1))) / p.length;
     p.forEach((val, i) => {
-        const h = (val / 10) * al, x = pad + i * (ab + esp), y = can.height - pad - h;
+        const h = (val / 10) * al, x = pad + i * (ab + espacio), y = can.height - pad - h;
         ctx.fillStyle = '#2b579a'; ctx.fillRect(x, y, ab, h);
         ctx.fillStyle = '#000'; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(val, x + (ab / 2), y - 4);
-        ctx.font = '8px sans-serif'; ctx.fillText(n[i], x + (ab / 2), can.height - pad + 12);
+        ctx.font = '8px sans-serif'; ctx.fillText(n[i].split(' ')[0], x + (ab / 2), can.height - pad + 12);
     });
 }
 
 function exportarExcel() {
     const t = document.getElementById('tablaDatos'); if (!t) return; let txt = "";
     t.querySelectorAll('tr').forEach(f => { let d = []; f.querySelectorAll('th,td').forEach(c => { d.push(c.innerText); }); txt += d.join("\t") + "\n"; });
-    navigator.clipboard.writeText(txt).then(() => { alert("¡Tabla copiada! Pégala en Excel."); });
+    navigator.clipboard.writeText(txt).then(() => { notificarStatus("¡Tabla copiada! Pégala en Excel."); });
 }
 
 function exportarPDF() { window.print(); }
@@ -116,14 +145,14 @@ function exportarPDF() { window.print(); }
 function saveAll() {
     localStorage.setItem('o_doc', document.getElementById('docView').innerHTML);
     const t = document.getElementById('tablaDatos'); if (t) localStorage.setItem('o_sheet', t.innerHTML);
-    document.getElementById('saveStatus').innerText = "¡TODO GUARDADO SECO EN LOCAL!";
+    notificarStatus("¡TODO GUARDADO SECO EN LOCAL!");
+}
+
+function notificarStatus(msg) {
+    document.getElementById('saveStatus').innerText = msg;
     setTimeout(() => { document.getElementById('saveStatus').innerText = "LISTO - OFFLINE SIN CONEXIONES EXTERNAS"; }, 2500);
 }
 
 window.onload = function() {
     const rd = localStorage.getItem('o_doc'); if (rd) document.getElementById('docView').innerHTML = rd;
-    const rs = localStorage.getItem('o_sheet');
-    if (rs) {
-        document.getElementById('contenedorTabla').innerHTML = `<div style="font-weight:bold;margin-bottom:10px;font-size:14px;color:#000;">Registro de Evaluaciones Académicas (Restaurado)</div><table id="tablaDatos">${rs}</table>`;
-    }
 }
