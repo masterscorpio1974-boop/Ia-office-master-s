@@ -1,18 +1,14 @@
-# CTRL+W busca .logo :DOCTYPE
-# html> Cambia object-fit:contain
-# por object-fit:contain<html
-# lang="es"> CTRL + O Enter.
-# CTRL+X <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:;">
-<title>OFFICE_ASSISTANT By MASTER S. </title>
-<link rel="stylesheet" href="style.css">
-# Si no quieres usar nano, haz
-# este parche
-# automático: </head>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:;">
+    <title>OFFICE_ASSISTANT By MASTER S.</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <div class="head">
     <div class="logo-img">
         <img src="assets/logo.png" alt="S">
@@ -23,7 +19,6 @@
     </div>
 </div>
 
-# Barra de estado y guardado seguro local responsiva
 <div style="padding: 10px; background: #f5f5f5; border-bottom: 1px solid #ddd;">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
         <span id="saveStatus" style="font-size:11px; font-weight: bold; color: #555;">LISTO - OFFLINE SIN CONEXIONES EXTERNAS</span>
@@ -31,7 +26,6 @@
     </div>
 </div>
 
-# Barra de herramientas principal (Procesador de Texto)
 <div class="ribbon" id="ribbonDoc" style="padding: 10px; background: #fff; border-bottom: 1px solid #ccc;">
     <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 10px;">
         <button onclick="formato('bold')" style="padding: 6px 10px;"><b>B</b></button>
@@ -69,7 +63,6 @@
     </div>
 </div>
 
-# Barra de herramientas (Hoja de Cálculo)
 <div class="ribbon" id="ribbonSheet" style="display:none; padding: 10px; background: #fff; border-bottom: 1px solid #ccc;">
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); gap: 6px; width: 100%;">
         <button onclick="insertarTablaCalificaciones()" style="padding: 8px 4px; font-weight: bold;">+ Hoja</button>
@@ -85,7 +78,6 @@
 </div>
 
 <div class="content" style="padding: 10px; box-sizing: border-box;">
-    <!-- SECCIÓN PROCESADOR DE TEXTO -->
     <div id="doc" contenteditable="true" style="outline: none; min-height: 250px; background: #fff; padding: 10px; border: 1px solid #eee; border-radius: 4px;">
         <p><b>Alex Rivera</b> · Jefe de Operaciones</p>
         <p><b>Asunto:</b> Resumen Trimestral - Edición COMPLETA BY MASTER S.</p>
@@ -100,13 +92,10 @@
         </ul>
     </div>
 
-    <!-- SECCIÓN HOJA DE CÁLCULO -->
     <div id="sheet" style="display:none;">
         <div id="hojas" style="background:#fff; border:1px solid #ccc; padding:15px; min-height:120px; border-radius:4px; color:#000; font-family:sans-serif; overflow-x: auto;">
             <p id="indicadorVacio" style="color:#666; font-size:13px; margin:0;">Presiona el botón <b>"+ Hoja"</b> arriba para desplegar un lienzo de datos local.</p>
         </div>
-        
-        <!-- LIENZO DE CANVAS TOTALMENTE INTEGRADO PARA GRAFICAR -->
         <div id="graficaWrap" style="display:none; margin-top:15px; background:#fff; border:1px solid #ccc; padding:10px; border-radius:4px;">
             <div style="font-weight:bold; font-size:12px; margin-bottom:8px; font-family:sans-serif; color:#333;">Visualización Estadística de Datos Local</div>
             <canvas id="miGrafica" width="300" height="150" style="width:100%; height:auto; background:#fafafa; border:1px solid #eee;"></canvas>
@@ -114,7 +103,6 @@
     </div>
 </div>
 
-<!-- LÓGICA INTEGRADA TOTALMENTE OFFLINE -->
 <script>
     function cambiarPestana(tipo) {
         const docView = document.getElementById('doc');
@@ -147,10 +135,9 @@
     function cambiarTamanoFuente(size) { document.execCommand('fontSize', false, size); }
     function cambiarColorTexto(color) { if(color !== "false") document.execCommand('foreColor', false, color); }
 
-    // Genera la tabla interactiva y oculta la advertencia inicial
     function insertarTablaCalificaciones() {
         const contenedor = document.getElementById('hojas');
-        document.getElementById('graficaWrap').style.display = 'none'; // Resetea gráfica anterior si la hay
+        document.getElementById('graficaWrap').style.display = 'none'; 
         contenedor.innerHTML = `
             <div style="font-weight:bold; margin-bottom:10px; font-size:14px; color:#000;">Nueva hoja de registro</div>
             <table id="tablaDatos" border="1" style="width:100%; border-collapse:collapse; text-align:center; background:#fff; color:#000; border-color:#ccc; font-size:13px;">
@@ -167,3 +154,21 @@
                 <tr>
                     <td contenteditable="true" style="text-align:left; padding:6px; border:1px solid #ccc;">Fila B</td>
                     <td contenteditable="true" class="val-num" style="border:1px solid #ccc;">4</td>
+                    <td contenteditable="true" class="val-num" style="border:1px solid #ccc;">9</td>
+                </tr>
+            </table>
+        `;
+    }
+
+    function grafica() {
+        const tabla = document.getElementById('tablaDatos');
+        if (!tabla) {
+            alert("No hay registros en la tabla. Presiona '+ Hoja' e introduce valores numéricos primero.");
+            return;
+        }
+        const celdasNumericas = document.querySelectorAll('.val-num');
+        let valores = [];
+        celdasNumericas.forEach(celda => {
+            let num = parseFloat(celda.innerText.trim());
+            if (!isNaN(num)) valores.push(num);
+        });
