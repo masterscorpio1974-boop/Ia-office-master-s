@@ -84,5 +84,19 @@
 
     <!-- Carga del Cerebro de la Aplicación -->
     <script src="logic.js"></script>
+        <!-- Ventana Modal Interna para Ver Datos Raw sin salir de la App -->
+    <div id="modalRaw" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;">
+        <div style="background: white; width: 100%; max-width: 500px; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; max-height: 80vh; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+            <h3 style="margin-bottom: 10px; font-size: 16px; color: #323130;">Estructura JSON de la Hoja (Raw Data):</h3>
+            <div style="flex: 1; overflow-y: auto; background: #f3f2f1; padding: 10px; border-radius: 4px; margin-bottom: 12px; border: 1px solid #d2d0ce;">
+                <pre id="textoModalRaw" style="margin: 0; font-family: monospace; font-size: 13px; white-space: pre-wrap; word-break: break-all; color: #201f1e;"></pre>
+            </div>
+            <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                <button onclick="navigator.clipboard.writeText(document.getElementById('textoModalRaw').innerText); alert('¡Copiado!');" style="background: #107c41; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-weight: 600;">📋 Copiar Datos</button>
+                <button onclick="document.getElementById('modalRaw').style.display = 'none';" style="background: #f3f2f1; color: #323130; border: 1px solid #a19f9d; padding: 8px 16px; border-radius: 4px; font-weight: 600;">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
