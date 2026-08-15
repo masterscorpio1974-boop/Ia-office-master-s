@@ -1,4 +1,4 @@
-name: Build IA_OFFICE_ASSISTANT APK
+name: Build IA OFFICE ASSISTANT APK
 
 on:
   workflow_dispatch:
@@ -29,7 +29,7 @@ jobs:
           npm install
           npm install @capacitor/android --save
 
-      - name: 📁 Crear www y copiar archivos raiz
+      - name: 📂 Crear www y copiar archivos raiz
         run: |
           mkdir -p www
           cp index.html www/
@@ -38,29 +38,16 @@ jobs:
           cp icon.png www/
           ls -la www/
 
-      - name: 🤖 Agregar plataforma Android
+      - name: 🏗️ Agregar plataforma Android
         run: |
           if [ ! -d "android" ]; then
             npx cap add android
           fi
 
-      - name: 🎨 Generar iconos desde icon.png
+      - name: 🎨 Generar Iconos Oficiales de la App
         run: |
-          mkdir -p android/app/src/main/res/mipmap-mdpi
-          mkdir -p android/app/src/main/res/mipmap-hdpi
-          mkdir -p android/app/src/main/res/mipmap-xhdpi
-          mkdir -p android/app/src/main/res/mipmap-xxhdpi
-          mkdir -p android/app/src/main/res/mipmap-xxxhdpi
-          cp icon.png android/app/src/main/res/mipmap-mdpi/ic_launcher.png
-          cp icon.png android/app/src/main/res/mipmap-hdpi/ic_launcher.png
-          cp icon.png android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
-          cp icon.png android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
-          cp icon.png android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
-          cp icon.png android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png
-          cp icon.png android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png
-          cp icon.png android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png
-          cp icon.png android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
-          cp icon.png android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
+          npm install -g @capacitor/assets
+          npx capacitor-assets generate --android
 
       - name: 🔄 Sincronizar archivos web
         run: npx cap sync android
