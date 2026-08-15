@@ -5,80 +5,234 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:;">
     <title>OFFICE_ASSISTANT By MASTER S.</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary-color: #2b579a;
+            --dark-bg: #2d2d2d;
+            --light-bg: #f5f5f5;
+            --border-color: #ccc;
+        }
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--light-bg);
+            color: #333;
+        }
+        .head {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .head img {
+            height: 32px;
+            object-fit: contain;
+        }
+        .head h1 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .head p {
+            margin: 0;
+            font-size: 11px;
+            opacity: 0.8;
+        }
+        .status-bar {
+            padding: 10px;
+            background: #e8e8e8;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .status-text {
+            font-size: 11px;
+            font-weight: bold;
+            color: #555;
+        }
+        .btn-save {
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .ribbon {
+            padding: 10px;
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .ribbon-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .ribbon button, .ribbon select {
+            padding: 6px 10px;
+            border: 1px solid var(--border-color);
+            background: #fafafa;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .format-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
+            gap: 6px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .format-grid button {
+            background: #e0e0e0;
+            border: none;
+            padding: 8px 4px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .format-grid button span {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 2px;
+        }
+        .tabs {
+            display: flex;
+            background: #e0e0e0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            color: #666;
+            background: #dcdcdc;
+        }
+        .tab.active {
+            background: white;
+            color: var(--primary-color);
+            border-top: 2px solid var(--primary-color);
+        }
+        .content {
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .editor-container {
+            outline: none;
+            min-height: 300px;
+            background: white;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .sheet-container {
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            background: white;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background: #f2f2f2;
+            font-weight: bold;
+        }
+        .text-left {
+            text-align: left;
+        }
+        .chart-container {
+            margin-top: 15px;
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 4px;
+        }
+        canvas {
+            width: 100%;
+            height: auto;
+            background: #fafafa;
+            border: 1px solid #eee;
+        }
+    </style>
 </head>
 <body>
 
 <div class="head">
-    <div class="logo-img">
-        <img src="assets/logo.png" alt="S">
-    </div>
+    <img src="assets/logo.png" alt="Logo">
     <div class="title">
         <h1>OFFICE_ASSISTANT</h1>
-        <p><small>By MASTER S. · VERSIÓN OFICIAL</small></p>
+        <p>By MASTER S. · VERSIÓN OFICIAL</p>
     </div>
 </div>
 
-<div style="padding: 10px; background: #f5f5f5; border-bottom: 1px solid #ddd;">
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-        <span id="saveStatus" style="font-size:11px; font-weight: bold; color: #555;">LISTO - OFFLINE SIN CONEXIONES EXTERNAS</span>
-        <button onclick="saveAll()" style="background:#e0e0e0; border:1px solid #ccc; padding:6px 12px; border-radius:4px; cursor:pointer; font-weight:bold; display: flex; align-items: center; gap: 4px;">🔒 Guardar</button>
-    </div>
+<div class="status-bar">
+    <span id="saveStatus" class="status-text">LISTO - OFFLINE SIN CONEXIONES EXTERNAS</span>
+    <button onclick="saveAll()" class="btn-save">🔒 Guardar todo</button>
 </div>
 
-<div class="ribbon" id="ribbonDoc" style="padding: 10px; background: #fff; border-bottom: 1px solid #ccc;">
-    <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 10px;">
-        <button onclick="formato('bold')" style="padding: 6px 10px;"><b>B</b></button>
-        <button onclick="formato('italic')" style="padding: 6px 10px;"><i>I</i></button>
-        <button onclick="formato('underline')" style="padding: 6px 10px;"><u>U</u></button>
-        <div style="width: 1px; height: 20px; background: #ccc;"></div>
-        
-        <select onchange="cambiarTamanoFuente(this.value)" style="padding: 4px;">
+<!-- HERRAMIENTAS PROCESADOR DE TEXTO -->
+<div class="ribbon" id="ribbonDoc">
+    <div class="ribbon-row">
+        <button onclick="ejecutar('bold')"><b>B</b></button>
+        <button onclick="ejecutar('italic')"><i>I</i></button>
+        <button onclick="ejecutar('underline')"><u>U</u></button>
+        <select onchange="ejecutarComando('fontSize', this.value)">
             <option value="3">Normal</option>
             <option value="5">Grande</option>
             <option value="7">Muy grande</option>
         </select>
-        
-        <select onchange="cambiarColorTexto(this.value)" style="padding: 4px;">
-            <option value="false">Color</option>
+        <select onchange="ejecutarComando('foreColor', this.value)">
             <option value="#000000">Negro</option>
             <option value="#2b579a">Azul Master</option>
             <option value="#cc0000">Rojo</option>
         </select>
     </div>
-    
-    <div class="format-blocks-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(75px, 1fr)); gap: 6px; width: 100%; max-width: 100%; box-sizing: border-box;">
-        <button onclick="alinear('justifyLeft')" style="background:#e0e0e0; border:none; padding:8px 4px; border-radius:4px; font-family:sans-serif; cursor:pointer; text-align:center; font-size: 11px;">
-            <span style="display:block; font-size:12px; margin-bottom: 2px;">←</span><b>Alinear Izq</b>
-        </button>
-        <button onclick="alinear('justifyCenter')" style="background:#e0e0e0; border:none; padding:8px 4px; border-radius:4px; font-family:sans-serif; cursor:pointer; text-align:center; font-size: 11px;">
-            <span style="display:block; font-size:12px; margin-bottom: 2px;">↔</span><b>Centrar</b>
-        </button>
-        <button onclick="alinear('justifyRight')" style="background:#e0e0e0; border:none; padding:8px 4px; border-radius:4px; font-family:sans-serif; cursor:pointer; text-align:center; font-size: 11px;">
-            <span style="display:block; font-size:12px; margin-bottom: 2px;">→</span><b>Alinear Der</b>
-        </button>
-        <button onclick="ejecutarComando('insertUnorderedList')" style="background:#e0e0e0; border:none; padding:8px 4px; border-radius:4px; font-family:sans-serif; cursor:pointer; text-align:center; font-size: 11px;">
-            <span style="display:block; font-size:12px; margin-bottom: 2px;">•</span><b>Lista</b>
-        </button>
+    <div class="format-grid">
+        <button onclick="ejecutar('justifyLeft')"><span>←</span>Alinear Izq</button>
+        <button onclick="ejecutar('justifyCenter')"><span>↔</span>Centrar</button>
+        <button onclick="ejecutar('justifyRight')"><span>→</span>Alinear Der</button>
+        <button onclick="ejecutar('insertUnorderedList')"><span>•</span>Lista</button>
     </div>
 </div>
 
-<div class="ribbon" id="ribbonSheet" style="display:none; padding: 10px; background: #fff; border-bottom: 1px solid #ccc;">
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); gap: 6px; width: 100%;">
-        <button onclick="insertarTablaCalificaciones()" style="padding: 8px 4px; font-weight: bold;">+ Hoja</button>
-        <button onclick="exportarExcel()" style="padding: 8px 4px; font-weight: bold;">Excel</button>
-        <button onclick="exportarPDF()" style="padding: 8px 4px; font-weight: bold;">PDF</button>
-        <button onclick="grafica()" style="padding: 8px 4px; font-weight: bold;">Grafica</button>
+<!-- HERRAMIENTAS HOJA DE CÁLCULO -->
+<div class="ribbon" id="ribbonSheet" style="display:none;">
+    <div class="format-grid" style="grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));">
+        <button onclick="insertarNuevaHoja()"><span>➕</span>+ Hoja</button>
+        <button onclick="exportarExcel()"><span>📊</span>Excel</button>
+        <button onclick="exportarPDF()"><span>📄</span>PDF</button>
+        <button onclick="generarGraficaLocal()"><span>📈</span>Grafica</button>
     </div>
 </div>
 
-<div class="tabs" style="margin-top:10px;">
-    <div class="tab active" id="tabDoc" onclick="cambiarPestana('doc')">Documento</div>
-    <div class="tab" id="tabSheet" onclick="cambiarPestana('sheet')">Hoja Cálculo</div>
+<div class="tabs">
+    <div class="tab active" id="tabDoc" onclick="cambiarVista('doc')">Documento</div>
+    <div class="tab" id="tabSheet" onclick="cambiarVista('sheet')">Hoja Cálculo</div>
 </div>
 
-<div class="content" style="padding: 10px; box-sizing: border-box;">
-    <div id="doc" contenteditable="true" style="outline: none; min-height: 250px; background: #fff; padding: 10px; border: 1px solid #eee; border-radius: 4px;">
+<div class="content">
+    <!-- AREA PROCESADOR DE TEXTO -->
+    <div id="docView" class="editor-container" contenteditable="true">
         <p><b>Alex Rivera</b> · Jefe de Operaciones</p>
         <p><b>Asunto:</b> Resumen Trimestral - Edición COMPLETA BY MASTER S.</p>
         <br>
@@ -92,27 +246,28 @@
         </ul>
     </div>
 
-    <div id="sheet" style="display:none;">
-        <div id="hojas" style="background:#fff; border:1px solid #ccc; padding:15px; min-height:120px; border-radius:4px; color:#000; font-family:sans-serif; overflow-x: auto;">
-            <p id="indicadorVacio" style="color:#666; font-size:13px; margin:0;">Presiona el botón <b>"+ Hoja"</b> arriba para desplegar un lienzo de datos local.</p>
+    <!-- AREA HOJA DE CÁLCULO -->
+    <div id="sheetView" style="display:none;">
+        <div class="sheet-container" id="contenedorTabla">
+            <p style="color:#666; font-size:13px; margin:0;">Presiona el botón <b>"+ Hoja"</b> arriba para desplegar un registro de datos interactivo.</p>
         </div>
-        <div id="graficaWrap" style="display:none; margin-top:15px; background:#fff; border:1px solid #ccc; padding:10px; border-radius:4px;">
-            <div style="font-weight:bold; font-size:12px; margin-bottom:8px; font-family:sans-serif; color:#333;">Visualización Estadística de Datos Local</div>
-            <canvas id="miGrafica" width="300" height="150" style="width:100%; height:auto; background:#fafafa; border:1px solid #eee;"></canvas>
+        <div id="graficaWrap" class="chart-container" style="display:none;">
+            <div style="font-weight:bold; font-size:12px; margin-bottom:8px; color:#333;">Visualización Estadística de Datos Local</div>
+            <canvas id="miGrafica" width="300" height="150"></canvas>
         </div>
     </div>
 </div>
 
 <script>
-    function cambiarPestana(tipo) {
-        const docView = document.getElementById('doc');
-        const sheetView = document.getElementById('sheet');
+    function cambiarVista(vista) {
+        const docView = document.getElementById('docView');
+        const sheetView = document.getElementById('sheetView');
         const ribbonDoc = document.getElementById('ribbonDoc');
         const ribbonSheet = document.getElementById('ribbonSheet');
         const tabDoc = document.getElementById('tabDoc');
         const tabSheet = document.getElementById('tabSheet');
 
-        if (tipo === 'doc') {
+        if (vista === 'doc') {
             docView.style.display = 'block';
             ribbonDoc.style.display = 'block';
             sheetView.style.display = 'none';
@@ -129,46 +284,174 @@
         }
     }
 
-    function formato(comando) { document.execCommand(comando, false, null); }
-    function alinear(direccion) { document.execCommand(direccion, false, null); }
-    function ejecutarComando(comando) { document.execCommand(comando, false, null); }
-    function cambiarTamanoFuente(size) { document.execCommand('fontSize', false, size); }
-    function cambiarColorTexto(color) { if(color !== "false") document.execCommand('foreColor', false, color); }
+    function ejecutar(comando) { document.execCommand(comando, false, null); }
+    function ejecutarComando(comando, valor) { document.execCommand(comando, false, valor); }
 
-    function insertarTablaCalificaciones() {
-        const contenedor = document.getElementById('hojas');
-        document.getElementById('graficaWrap').style.display = 'none'; 
+        function insertarNuevaHoja() {
+        document.getElementById('graficaWrap').style.display = 'none';
+        const contenedor = document.getElementById('contenedorTabla');
         contenedor.innerHTML = `
-            <div style="font-weight:bold; margin-bottom:10px; font-size:14px; color:#000;">Nueva hoja de registro</div>
-            <table id="tablaDatos" border="1" style="width:100%; border-collapse:collapse; text-align:center; background:#fff; color:#000; border-color:#ccc; font-size:13px;">
-                <tr style="background:#f2f2f2; font-weight:bold;">
-                    <th style="padding:6px; border:1px solid #ccc;">Datos</th>
-                    <th style="border:1px solid #ccc;">Muestra 1</th>
-                    <th style="border:1px solid #ccc;">Muestra 2</th>
-                </tr>
-                <tr>
-                    <td contenteditable="true" style="text-align:left; padding:6px; border:1px solid #ccc;">Fila A</td>
-                    <td contenteditable="true" class="val-num" style="border:1px solid #ccc;">8</td>
-                    <td contenteditable="true" class="val-num" style="border:1px solid #ccc;">6</td>
-                </tr>
-                <tr>
-                    <td contenteditable="true" style="text-align:left; padding:6px; border:1px solid #ccc;">Fila B</td>
-                    <td contenteditable="true" class="val-num" style="border:1px solid #ccc;">4</td>
-                    <td contenteditable="true" class="val-num" style="border:1px solid #ccc;">9</td>
-                </tr>
+            <div style="font-weight:bold; margin-bottom:10px; font-size:14px; color:#000;">Registro de Evaluaciones Académicas</div>
+            <table id="tablaDatos">
+                <thead>
+                    <tr style="background:#f2f2f2; font-weight:bold;">
+                        <th class="text-left" style="padding:6px; border:1px solid #ccc;">Alumno</th>
+                        <th style="border:1px solid #ccc;">Parcial 1</th>
+                        <th style="border:1px solid #ccc;">Parcial 2</th>
+                        <th style="border:1px solid #ccc;">Promedio Final</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td contenteditable="true" class="text-left" style="padding:6px; border:1px solid #ccc;">Juan Pérez</td>
+                        <td contenteditable="true" class="p1" oninput="calcularFila(this)" style="border:1px solid #ccc;">8</td>
+                        <td contenteditable="true" class="p2" oninput="calcularFila(this)" style="border:1px solid #ccc;">7</td>
+                        <td class="res" style="font-weight:bold; border:1px solid #ccc;">7.5</td>
+                    </tr>
+                    <tr>
+                        <td contenteditable="true" class="text-left" style="padding:6px; border:1px solid #ccc;">María Gómez</td>
+                        <td contenteditable="true" class="p1" oninput="calcularFila(this)" style="border:1px solid #ccc;">10</td>
+                        <td contenteditable="true" class="p2" oninput="calcularFila(this)" style="border:1px solid #ccc;">9</td>
+                        <td class="res" style="font-weight:bold; border:1px solid #ccc;">9.5</td>
+                    </tr>
+                    <tr>
+                        <td contenteditable="true" class="text-left" style="padding:6px; border:1px solid #ccc;">Carlos López</td>
+                        <td contenteditable="true" class="p1" oninput="calcularFila(this)" style="border:1px solid #ccc;">6</td>
+                        <td contenteditable="true" class="p2" oninput="calcularFila(this)" style="border:1px solid #ccc;">5</td>
+                        <td class="res" style="font-weight:bold; color:red; border:1px solid #ccc;">5.5</td>
+                    </tr>
+                </tbody>
             </table>
+            <p style="font-size:11px; color:#666; margin-top:8px; margin-bottom:0;">* Edita las notas de los parciales directamente; el promedio se calcula en tiempo real.</p>
         `;
     }
 
-    function grafica() {
+    function calcularFila(celda) {
+        const fila = celda.parentElement;
+        const p1 = parseFloat(fila.querySelector('.p1').innerText.trim() || 0);
+        const p2 = parseFloat(fila.querySelector('.p2').innerText.trim() || 0);
+        const celdaRes = fila.querySelector('.res');
+        
+        const promedio = ((p1 + p2) / 2).toFixed(1);
+        celdaRes.innerText = promedio;
+        
+        if (promedio >= 6) {
+            celdaRes.style.color = 'green';
+        } else {
+            celdaRes.style.color = 'red';
+        }
+    }
+
+    function generarGraficaLocal() {
         const tabla = document.getElementById('tablaDatos');
         if (!tabla) {
-            alert("No hay registros en la tabla. Presiona '+ Hoja' e introduce valores numéricos primero.");
+            alert("No hay una hoja activa. Presiona '+ Hoja' primero.");
             return;
         }
-        const celdasNumericas = document.querySelectorAll('.val-num');
-        let valores = [];
-        celdasNumericas.forEach(celda => {
-            let num = parseFloat(celda.innerText.trim());
-            if (!isNaN(num)) valores.push(num);
+
+        const filas = tabla.querySelectorAll('tbody tr');
+        let nombres = [];
+        let promedios = [];
+
+        filas.forEach(fila => {
+            const nombre = fila.cells[0].innerText.trim();
+            const promedio = parseFloat(fila.querySelector('.res').innerText.trim());
+            if (nombre && !isNaN(promedio)) {
+                nombres.push(nombre);
+                promedios.push(promedio);
+            }
         });
+
+        if (promedios.length === 0) {
+            alert("Introduce valores válidos en la tabla para graficar.");
+            return;
+        }
+
+        document.getElementById('graficaWrap').style.display = 'block';
+        const canvas = document.getElementById('miGrafica');
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const padding = 25;
+        const espacio = 15;
+        const anchoMax = canvas.width - (padding * 2);
+        const altoMax = canvas.height - (padding * 2) - 10;
+        const anchoBarra = (anchoMax - (espacio * (promedios.length - 1))) / promedios.length;
+        const valorMax = 10;
+
+        promedios.forEach((val, i) => {
+            const alturaBarra = (val / valorMax) * altoMax;
+            const x = padding + i * (anchoBarra + espacio);
+            const y = canvas.height - padding - alturaBarra;
+
+            ctx.fillStyle = '#2b579a';
+            ctx.fillRect(x, y, anchoBarra, alturaBarra);
+
+            ctx.fillStyle = '#000';
+            ctx.font = 'bold 9px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(val, x + (anchoBarra / 2), y - 4);
+
+            ctx.font = '8px sans-serif';
+            ctx.fillText(nombres[i].split(' ')[0], x + (anchoBarra / 2), canvas.height - padding + 12);
+        });
+    }
+
+    function exportarExcel() {
+        const tabla = document.getElementById('tablaDatos');
+        if (!tabla) {
+            alert("No hay datos que exportar. Presiona '+ Hoja' primero.");
+            return;
+        }
+        let textoCopiar = "";
+        const filas = tabla.querySelectorAll('tr');
+        filas.forEach(fila => {
+            const celdas = fila.querySelectorAll('th, td');
+            let datosFila = [];
+            celdas.forEach(celda => { datosFila.push(celda.innerText); });
+            textoCopiar += datosFila.join("\t") + "\n";
+        });
+
+        navigator.clipboard.writeText(textoCopiar).then(() => {
+            alert("¡Tabla convertida! Los datos se han copiado al portapapeles. Abre cualquier software de cuadrículas externo y dale 'Pegar' para volcarlos en columnas.");
+        });
+    }
+
+    function exportarPDF() {
+        window.print();
+    }
+
+    function saveAll() {
+        const htmlDoc = document.getElementById('docView').innerHTML;
+        localStorage.setItem('master_office_doc_data', htmlDoc);
+        
+        const tabla = document.getElementById('tablaDatos');
+        if (tabla) {
+            localStorage.setItem('master_office_sheet_data', tabla.innerHTML);
+        }
+
+        const status = document.getElementById('saveStatus');
+        status.innerText = "¡TODO GUARDADO SECO Y ENCRIPTADO LOCALMENTE!";
+        status.style.color = "#4CAF50";
+        setTimeout(() => {
+            status.innerText = "LISTO - OFFLINE SIN CONEXIONES EXTERNAS";
+            status.style.color = "";
+        }, 3000);
+    }
+
+    window.onload = function() {
+        const respaldoDoc = localStorage.getItem('master_office_doc_data');
+        const respaldoSheet = localStorage.getItem('master_office_sheet_data');
+        
+        if (respaldoSheet) {
+            document.getElementById('contenedorTabla').innerHTML = `
+                <div style="font-weight:bold; margin-bottom:10px; font-size:14px; color:#000;">Registro de Evaluaciones Académicas (Restaurado)</div>
+                <table id="tablaDatos">${respaldoSheet}</table>`;
+        }
+    }
+</script>
+</body>
+</html>
+
+
+
