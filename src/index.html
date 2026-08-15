@@ -30,17 +30,16 @@
         <button onclick="formato('bold')"><b>B</b></button>
         <button onclick="formato('italic')"><i>I</i></button>
         <button onclick="formato('underline')"><u>U</u></button>
-        <select onchange="cambiarTamanoFuente(this.value)">
-            <option value="3">Normal</option>
-            <option value="5">Grande</option>
-            <option value="7">Muy grande</option>
-        </select>
-        <select onchange="cambiarColorTexto(this.value)">
-            <option value="false">Color</option>
-            <option value="#000000">Negro</option>
-            <option value="#2b579a">Azul Master</option>
-            <option value="#cc0000">Rojo</option>
-        </select>
+                <!-- Botones de Tamaño Rápido -->
+        <button onclick="cambiarTamanoRapido('3')">Normal</button>
+        <button onclick="cambiarTamanoRapido('5')"><b>G</b></button>
+        <button onclick="cambiarTamanoRapido('7')"><b>XG</b></button>
+        <div style="width: 1px; height: 20px; background: #ccc; margin: 0 4px; display: inline-block; vertical-align: middle;"></div>
+        <!-- Círculos de Color Directos Táctiles -->
+        <div onclick="cambiarColorRapido('#000000')" style="width: 22px; height: 22px; background: #000; border-radius: 50%; border: 2px solid #ccc; cursor: pointer; display: inline-block; vertical-align: middle;"></div>
+        <div onclick="cambiarColorRapido('#2b579a')" style="width: 22px; height: 22px; background: #2b579a; border-radius: 50%; border: 2px solid #ccc; cursor: pointer; display: inline-block; vertical-align: middle;"></div>
+        <div onclick="cambiarColorRapido('#cc0000')" style="width: 22px; height: 22px; background: #cc0000; border-radius: 50%; border: 2px solid #ccc; cursor: pointer; display: inline-block; vertical-align: middle;"></div>
+
     </div>
     <div class="format-grid">
         <button onclick="alinear('justifyLeft')"><span>←</span>Alinear Izq</button>
