@@ -59,13 +59,46 @@ function crearNuevo() {
 }
 
 function crearNuevoSheet() {
-    if (confirm("¿Borrar la hoja y empezar una nueva?")) {
+    if (confirm("¿Borrar la hoja y empezar una nueva vacía?")) {
         localStorage.removeItem('o_sheet');
-        document.getElementById('contenedorTabla').innerHTML = `<p style="color:#666; font-size:13px; margin:0;">Presiona el botón <b>"+ Hoja"</b> arriba para desplegar una nueva tabla</p>`;
         document.getElementById('graficaWrap').style.display = 'none';
-        notificarStatus("Hoja nueva creada");
+        document.getElementById('contenedorTabla').innerHTML = `
+            <div style="font-weight:bold; margin-bottom:10px; font-size:14px; color:#000;">Hoja Nueva - Vacía</div>
+            <table id="tablaDatos">
+                <thead>
+                    <tr>
+                        <th style="text-align:left; border:1px solid #ccc; padding:6px; background:#f2f2f2;">Alumno</th>
+                        <th style="border:1px solid #ccc; padding:6px; background:#f2f2f2;">Parcial 1</th>
+                        <th style="border:1px solid #ccc; padding:6px; background:#f2f2f2;">Parcial 2</th>
+                        <th style="border:1px solid #ccc; padding:6px; background:#f2f2f2;">Promedio Final</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td contenteditable="true" style="border:1px solid #ccc; padding:6px;"></td>
+                        <td contenteditable="true" class="p1" oninput="calcularFila(this)" style="border:1px solid #ccc;"></td>
+                        <td contenteditable="true" class="p2" oninput="calcularFila(this)" style="border:1px solid #ccc;"></td>
+                        <td class="res" style="font-weight:bold; border:1px solid #ccc;">0</td>
+                    </tr>
+                    <tr>
+                        <td contenteditable="true" style="border:1px solid #ccc; padding:6px;"></td>
+                        <td contenteditable="true" class="p1" oninput="calcularFila(this)" style="border:1px solid #ccc;"></td>
+                        <td contenteditable="true" class="p2" oninput="calcularFila(this)" style="border:1px solid #ccc;"></td>
+                        <td class="res" style="font-weight:bold; border:1px solid #ccc;">0</td>
+                    </tr>
+                    <tr>
+                        <td contenteditable="true" style="border:1px solid #ccc; padding:6px;"></td>
+                        <td contenteditable="true" class="p1" oninput="calcularFila(this)" style="border:1px solid #ccc;"></td>
+                        <td contenteditable="true" class="p2" oninput="calcularFila(this)" style="border:1px solid #ccc;"></td>
+                        <td class="res" style="font-weight:bold; border:1px solid #ccc;">0</td>
+                    </tr>
+                </tbody>
+            </table>`;
+        notificarStatus("Hoja nueva vacía creada");
     }
 }
+    
+
 
 function cargarDatosGuardados() {
     const rSheet = localStorage.getItem('o_sheet');
