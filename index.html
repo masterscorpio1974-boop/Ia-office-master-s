@@ -1,56 +1,72 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>OFFICE_ASSISTANT</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OFFICE ASSISTANT</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="h">
-  <div class="logo-box"><img src="./icon.png" onerror="this.style.display='none';this.parentNode.innerText='S'"></div>
-  <div><b>OFFICE_ASSISTANT</b><br><small>By MASTER S. · VERSIÓN OFICIAL OFFLINE</small></div>
-</div>
-<div class="bar"><span id="saveStatus">LISTO - OFFLINE</span><button onclick="saveAll()">🔒 Guardar todo</button></div>
 
-<div id="ribbonDoc" class="ribbon">
-  <button onclick="aplicarEstilo('bold')"><b>B</b></button>
-  <button onclick="aplicarEstilo('italic')"><i>I</i></button>
-  <button onclick="aplicarEstilo('underline')"><u>U</u></button>
-  <button onclick="aplicarTamano('16px')">Normal</button>
-  <button onclick="aplicarTamano('20px')">G</button>
-  <button onclick="aplicarTamano('26px')">XG</button>
-  <button onclick="aplicarColor('#000000')" class="c-dot" style="background:#000"></button>
-  <button onclick="aplicarColor('#2b579a')" class="c-dot" style="background:#2b579a"></button>
-  <button onclick="aplicarColor('#cc0000')" class="c-dot" style="background:#cc0000"></button>
-  <br>
-  <button onclick="crearNuevo()">Nuevo</button>
-  <button onclick="cargarDatosGuardados()" class="eye">👁️</button>
-  <button onclick="copiarDocumento()">Copiar</button>
-  <button onclick="window.print()">PDF</button>
-  <button onclick="aplicarEstilo('justifyLeft')">←Izq</button>
-  <button onclick="aplicarEstilo('justifyCenter')">↔Cen</button>
-  <button onclick="aplicarEstilo('justifyRight')">Der→</button>
-  <button onclick="aplicarEstilo('insertUnorderedList')">•Lista</button>
-</div>
+    <div class="h">
+        <div class="logo-box"><img src="./icon.png" onerror="this.style.display='none';this.parentElement.innerText='S'"></div>
+        <div><b>OFFICE ASSISTANT</b><br><small>By MASTER S. · VERSIÓN OFICIAL OFFLINE</small></div>
+    </div>
 
-<div id="ribbonSheet" class="ribbon" style="display:none">
-  <button onclick="insertarNuevaHoja()">+Hoja</button>
-  <button onclick="cargarDatosGuardados()" class="eye">👁️</button>
-  <button onclick="crearNuevoSheet()">Nuevo</button>
-  <button onclick="exportarExcel()">Excel</button>
-  <button onclick="window.print()">PDF</button>
-  <button onclick="generarGraficaLocal()">Gráfica</button>
-</div>
+    <div class="bar">
+        <span id="saveStatus">LISTO - OFFLINE</span>
+        <button onclick="guardarTodo()">💾 Guardar todo</button>
+    </div>
 
-<div class="tabs">
-  <div id="tabDoc" class="tab active" onclick="cambiarVista('doc')">Documento</div>
-  <div id="tabSheet" class="tab" onclick="cambiarVista('sheet')">Hoja Cálculo</div>
-</div>
+    <!-- Cintas de Opciones (Ribbons) -->
+    <div id="ribbonDoc" class="ribbon">
+        <button onclick="formatoDoc('B')"><b>B</b></button>
+        <button onclick="formatoDoc('I')"><i>I</i></button>
+        <button onclick="formatoDoc('U')"><u>U</u></button>
+        <button onclick="formatoDoc('Normal')">Normal</button>
+        <button onclick="formatoDoc('G')">G</button>
+        <button onclick="formatoDoc('XG')">XG</button>
+        <button onclick="setColorDoc('#000000')" class="c-dot" style="background:#000000"></button>
+        <button onclick="setColorDoc('#2b579a')" class="c-dot" style="background:#2b579a"></button>
+        <button onclick="setColorDoc('#cc0000')" class="c-dot" style="background:#cc0000"></button>
+        <br>
+        <button onclick="nuevoDoc()">Nuevo</button>
+        <button onclick="cargarDatosGuardados()" class="eye">👁️</button>
+        <button onclick="copiarDocu()">Copiar</button>
+        <button onclick="window.print()">PDF</button>
+        <button onclick="formatoDoc('justifyLeft')">← Izq</button>
+        <button onclick="formatoDoc('justifyCenter')">→ Cen ←</button>
+        <button onclick="formatoDoc('justifyRight')">Der →</button>
+        <button onclick="formatoDoc('insertUnorderedList')">• Lista</button>
+    </div>
 
-<div id="docView" contenteditable="true">Escribe aquí tu documento...</div>
-<div id="sheetView" style="display:none;padding:8px"><div id="contenedorTabla"></div><div id="graficaWrap" style="display:none;margin-top:12px"><canvas id="miGrafica" width="360" height="220" style="border:1px solid #ccc;width:100%;background:#fff"></canvas></div></div>
+    <div id="ribbonSheet" class="ribbon" style="display:none;">
+        <button onclick="insertarNuevaHoja()">📄 Nueva Hoja</button>
+        <button onclick="cargarDatosGuardados()" class="eye">👁️</button>
+        <button onclick="crearNuevoSheet()">✨ Nuevo</button>
+        <button onclick="exportarExcel()">📊 Excel</button>
+        <button onclick="window.print()">📄 PDF</button>
+        <button onclick="generarGraficaLocal()">📈 Gráfica</button>
+    </div>
 
-<script src="logic.js"></script>
+    <!-- Pestañas de Navegación -->
+    <div class="tabs">
+        <div id="tabDoc" class="tab active" onclick="cambiarVista('doc')">Documento</div>
+        <div id="tabSheet" class="tab" onclick="cambiarVista('sheet')">Hoja Cálculo</div>
+    </div>
+
+    <!-- Vistas de la Aplicación -->
+    <div id="docView" class="view">
+        <div id="editorDocumento" contenteditable="true">Escribe aquí tu documento...</div>
+    </div>
+
+    <div id="sheetView" class="view" style="display:none; padding:8px;">
+        <div id="contenedorTabla">
+            <!-- La tabla o cuadrícula de celdas se generará dinámicamente aquí -->
+            <div id="graficaWrap" style="margin-top:8px;"></div>
+        </div>
+    </div>
+
+    <script src="logic.js"></script>
 </body>
 </html>
