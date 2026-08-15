@@ -1,43 +1,57 @@
-function cambiarVista(vista) {
-    const docView = document.getElementById('docView');
-    const sheetView = document.getElementById('sheetView');
-    const ribbonDoc = document.getElementById('ribbonDoc');
-    const ribbonSheet = document.getElementById('ribbonSheet');
-    const tabDoc = document.getElementById('tabDoc');
-    const tabSheet = document.getElementById('tabSheet');
+let rangoGuardado = null;
 
-    if (vista === 'doc') {
-        docView.style.display = 'block';
-        ribbonDoc.style.display = 'block';
-        sheetView.style.display = 'none';
-        ribbonSheet.style.display = 'none';
-        tabDoc.classList.add('active');
-        tabSheet.classList.remove('active');
-    } else {
-        docView.style.display = 'none';
-        ribbonDoc.style.display = 'none';
-        sheetView.style.display = 'block';
-        ribbonSheet.style.display = 'block';
-        tabDoc.classList.remove('active');
-        tabSheet.classList.add('active');
+function guardarSeleccion() {
+    const sel = window.getSelection();
+    if (sel.rangeCount > 0) {
+        rangoGuardado = sel.getRangeAt(0).cloneRange();
     }
 }
 
-function formato(comando) { document.execCommand(comando, false, null); }
-function alinear(direccion) { document.execCommand(direccion, false, null); }
-function ejecutarComando(comando, valor) { document.execCommand(comando, false, valor); }
-function cambiarTamanoFuente(size) { document.execCommand('fontSize', false, size); }
-function cambiarColorTexto(color) { if(color !== "false") document.execCommand('foreColor', false, color); }
+function restaurarSeleccion() {
+    const sel = window.getSelection();
+    if (rangoGuardado) {
+        sel.removeAllRanges();
+        sel.addRange(rangoGuardado);
+    }
+}
+
+function cambiarVista(vista) {
+    const d = document.getElementById('docView'), s = document.getElementById('sheetView');
+    const rd = document.getElementById('ribbonDoc'), rs = document.getElementById('ribbonSheet');
+    const td = document.getElementById('tabDoc'), ts = document.getElementById('tabSheet');
+    
+    if (vista === 'doc') {
+        d.style.display = 'block'; rd.style.display = 'block'; s.style.display = 'none'; rs.style.display = 'none';
+        td.classList.add('active'); ts.classList.remove('active');
+    } else {
+        d.style.display = 'none'; rd.style.display = 'none'; s.style.display = 'block'; rs.style.display = 'block';
+        td.classList.remove('active'); ts.classList.add('active');
+    }
+}
+
+function aplicarEstilo(cmd) {
+    restaurarSeleccion();
+    document.execCommand(cmd, false, null);
+}
+
+function aplicarColor(color) {
+    restaurarSeleccion();
+    document.execCommand('foreColor', false, color);
+}
+
+function aplicarTamano(tam) {
+    restaurarSeleccion();
+    document.execCommand('fontSize', false, tam);
+}
 
 function insertarNuevaHoja() {
     document.getElementById('graficaWrap').style.display = 'none';
-    const contenedor = document.getElementById('contenedorTabla');
-    contenedor.innerHTML = `
+    document.getElementById('contenedorTabla').innerHTML = `
         <div style="font-weight:bold; margin-bottom:10px; font-size:14px; color:#000;">Registro de Evaluaciones Académicas</div>
         <table id="tablaDatos">
             <thead>
                 <tr>
-                    <th class="text-left">Alumno</th>
+                    <th style="text-align:left;">Alumno</th>
                     <th>Parcial 1</th>
                     <th>Parcial 2</th>
                     <th>Promedio Final</th>
@@ -45,100 +59,71 @@ function insertarNuevaHoja() {
             </thead>
             <tbody>
                 <tr>
-                    <td contenteditable="true" class="text-left">Juan Pérez</td>
+                    <td contenteditable="true" style="text-align:left;">Juan Pérez</td>
                     <td contenteditable="true" class="p1" oninput="calcularFila(this)">8</td>
                     <td contenteditable="true" class="p2" oninput="calcularFila(this)">7</td>
                     <td class="res" style="font-weight:bold;">7.5</td>
                 </tr>
                 <tr>
-                    <td contenteditable="true" class="text-left">María Gómez</td>
+                    <td contenteditable="true" style="text-align:left;">María Gómez</td>
                     <td contenteditable="true" class="p1" oninput="calcularFila(this)">10</td>
                     <td contenteditable="true" class="p2" oninput="calcularFila(this)">9</td>
                     <td class="res" style="font-weight:bold;">9.5</td>
                 </tr>
                 <tr>
-                    <td contenteditable="true" class="text-left">Carlos López</td>
+                    <td contenteditable="true" style="text-align:left;">Carlos López</td>
                     <td contenteditable="true" class="p1" oninput="calcularFila(this)">6</td>
                     <td contenteditable="true" class="p2" oninput="calcularFila(this)">5</td>
                     <td class="res" style="font-weight:bold; color:red;">5.5</td>
                 </tr>
             </tbody>
-        </table>
-    `;
+        </table>`;
 }
 
 function calcularFila(celda) {
-    const fila = celda.parentElement;
-    const p1 = parseFloat(fila.querySelector('.p1').innerText.trim() || 0);
-    const p2 = parseFloat(fila.querySelector('.p2').innerText.trim() || 0);
-    const celdaRes = fila.querySelector('.res');
-    const promedio = ((p1 + p2) / 2).toFixed(1);
-    celdaRes.innerText = promedio;
-    celdaRes.style.color = promedio >= 6 ? 'green' : 'red';
+    const f = celda.parentElement;
+    const p1 = parseFloat(f.querySelector('.p1').innerText.trim() || 0);
+    const p2 = parseFloat(f.querySelector('.p2').innerText.trim() || 0);
+    const r = f.querySelector('.res'), p = ((p1 + p2) / 2).toFixed(1);
+    r.innerText = p; r.style.color = p >= 6 ? 'green' : 'red';
 }
 
 function generarGraficaLocal() {
-    const tabla = document.getElementById('tablaDatos');
-    if (!tabla) { alert("Presiona '+ Hoja' primero."); return; }
-    const filas = tabla.querySelectorAll('tbody tr');
-    let nombres = [], promedios = [];
-    filas.forEach(fila => {
-        const nombre = fila.cells[0].innerText.trim();
-        const promedio = parseFloat(fila.querySelector('.res').innerText.trim());
-        if (nombre && !isNaN(promedio)) { nombres.push(nombre); promedios.push(promedio); }
+    const t = document.getElementById('tablaDatos'); if (!t) return;
+    let n = [], p = []; t.querySelectorAll('tbody tr').forEach(f => {
+        const nom = f.cells[0].innerText.trim(), prom = parseFloat(f.querySelector('.res').innerText.trim());
+        if (nom && !isNaN(prom)) { n.push(nom); p.push(prom); }
     });
-    if (promedios.length === 0) return;
-    document.getElementById('graficaWrap').style.display = 'block';
-    const canvas = document.getElementById('miGrafica');
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const padding = 25, espacio = 15;
-    const anchoMax = canvas.width - (padding * 2);
-    const altoMax = canvas.height - (padding * 2) - 10;
-    const anchoBarra = (anchoMax - (espacio * (promedios.length - 1))) / promedios.length;
-    promedios.forEach((val, i) => {
-        const alturaBarra = (val / 10) * altoMax;
-        const x = padding + i * (anchoBarra + espacio);
-        const y = canvas.height - padding - alturaBarra;
-        ctx.fillStyle = '#2b579a';
-        ctx.fillRect(x, y, anchoBarra, alturaBarra);
-        ctx.fillStyle = '#000';
-        ctx.font = 'bold 9px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText(val, x + (anchoBarra / 2), y - 4);
+    if (p.length === 0) return; document.getElementById('graficaWrap').style.display = 'block';
+    const can = document.getElementById('miGrafica'), ctx = can.getContext('2d'); ctx.clearRect(0, 0, can.width, can.height);
+    const pad = 25, esp = 15, am = can.width - (pad * 2), al = can.height - (pad * 2) - 10, ab = (am - (esp * (p.length - 1))) / p.length;
+    p.forEach((val, i) => {
+        const h = (val / 10) * al, x = pad + i * (ab + esp), y = can.height - pad - h;
+        ctx.fillStyle = '#2b579a'; ctx.fillRect(x, y, ab, h);
+        ctx.fillStyle = '#000'; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(val, x + (ab / 2), y - 4);
+        ctx.font = '8px sans-serif'; ctx.fillText(n[i], x + (ab / 2), can.height - pad + 12);
     });
 }
 
 function exportarExcel() {
-    const tabla = document.getElementById('tablaDatos');
-    if (!tabla) return;
-    let textoCopiar = "";
-    tabla.querySelectorAll('tr').forEach(fila => {
-        let datosFila = [];
-        fila.querySelectorAll('th, td').forEach(celda => { datosFila.push(celda.innerText); });
-        textoCopiar += datosFila.join("\t") + "\n";
-    });
-    navigator.clipboard.writeText(textoCopiar).then(() => { alert("¡Copiado! Pégalo en tu hoja de cálculo externa."); });
+    const t = document.getElementById('tablaDatos'); if (!t) return; let txt = "";
+    t.querySelectorAll('tr').forEach(f => { let d = []; f.querySelectorAll('th,td').forEach(c => { d.push(c.innerText); }); txt += d.join("\t") + "\n"; });
+    navigator.clipboard.writeText(txt).then(() => { alert("¡Tabla copiada! Pégala en Excel."); });
 }
 
 function exportarPDF() { window.print(); }
 
 function saveAll() {
-    localStorage.setItem('master_office_doc_data', document.getElementById('docView').innerHTML);
-    const tabla = document.getElementById('tablaDatos');
-    if (tabla) localStorage.setItem('master_office_sheet_data', tabla.innerHTML);
-    document.getElementById('saveStatus').innerText = "¡GUARDADO SEGURO LOCALMENTE!";
+    localStorage.setItem('o_doc', document.getElementById('docView').innerHTML);
+    const t = document.getElementById('tablaDatos'); if (t) localStorage.setItem('o_sheet', t.innerHTML);
+    document.getElementById('saveStatus').innerText = "¡TODO GUARDADO SECO EN LOCAL!";
     setTimeout(() => { document.getElementById('saveStatus').innerText = "LISTO - OFFLINE SIN CONEXIONES EXTERNAS"; }, 2500);
 }
 
 window.onload = function() {
-    const rDoc = localStorage.getItem('master_office_doc_data');
-    if (rDoc) document.getElementById('docView').innerHTML = rDoc;
-    const rSheet = localStorage.getItem('master_office_sheet_data');
-    if (rSheet) document.getElementById('contenedorTabla').innerHTML = `<div style="font-weight:bold;margin-bottom:10px;font-size:14px;color:#000;">Registro de Evaluaciones Académicas (Restaurado)</div><table id="tablaDatos">${rSheet}</table>`;
-    }}
-
-
-function cambiarColorRapido(c){document.execCommand('foreColor',false,c);}
-function cambiarTamanoRapido(s){document.execCommand('fontSize',false,s);}
-
+    const rd = localStorage.getItem('o_doc'); if (rd) document.getElementById('docView').innerHTML = rd;
+    const rs = localStorage.getItem('o_sheet');
+    if (rs) {
+        document.getElementById('contenedorTabla').innerHTML = `<div style="font-weight:bold;margin-bottom:10px;font-size:14px;color:#000;">Registro de Evaluaciones Académicas (Restaurado)</div><table id="tablaDatos">${rs}</table>`;
+    }
+}
