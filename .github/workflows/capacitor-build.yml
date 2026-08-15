@@ -2,6 +2,8 @@ name: Build IA_OFFICE_ASSISTANT APK
 
 on:
   workflow_dispatch:
+  push:
+    branches: [ main ]
 
 jobs:
   build:
@@ -24,62 +26,55 @@ jobs:
       - name: 🤖 Instalar Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: 🎨 Instalar ImageMagick para iconos
-        run: sudo apt-get update && sudo apt-get install -y imagemagick
-
       - name: 📦 Instalar dependencias
         run: |
           npm install
           npm install @capacitor/android --save
 
-      - name: 🔍 Verificar estructura
+      - name: 🔍 Verificar estructura RAIZ
         run: |
-          ls -la src/
-          test -f src/index.html && echo "✅ index.html presente"
-          test -f src/style.css && echo "✅ style.css presente"
-          test -f src/logic.js && echo "✅ logic.js presente"
-          test -f assets/logo.png && echo "✅ Logo presente"
+          ls -la
+          test -f index.html && echo "✅ index.html presente"
+          test -f logic.js && echo "✅ logic.js presente"
+          test -f style.css && echo "✅ style.css presente"
+          test -f icon.png && echo "✅ icon.png presente"
+          test -f capacitor.config.json && echo "✅ config presente"
 
-      - name: 🏗️ Agregar plataforma Android (si no existe)
+      - name: 🤖 Agregar plataforma Android
         run: |
           if [ ! -d "android" ]; then
             npx cap add android
           fi
 
-      - name: 📱 Generar iconos Android desde tu logo
+      - name: 🎨 Generar iconos desde icon.png
         run: |
           mkdir -p android/app/src/main/res/mipmap-mdpi
           mkdir -p android/app/src/main/res/mipmap-hdpi
           mkdir -p android/app/src/main/res/mipmap-xhdpi
           mkdir -p android/app/src/main/res/mipmap-xxhdpi
           mkdir -p android/app/src/main/res/mipmap-xxxhdpi
-          convert assets/logo.png -gravity center -extent 1:1 +repage -resize 48x48 android/app/src/main/res/mipmap-mdpi/ic_launcher.png
-          convert assets/logo.png -gravity center -extent 1:1 +repage -resize 72x72 android/app/src/main/res/mipmap-hdpi/ic_launcher.png
-          convert assets/logo.png -gravity center -extent 1:1 +repage -resize 96x96 android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
-          convert assets/logo.png -gravity center -extent 1:1 +repage -resize 144x144 android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
-          convert assets/logo.png -gravity center -extent 1:1 +repage -resize 192x192 android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
-          cp android/app/src/main/res/mipmap-mdpi/ic_launcher.png android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png
-          cp android/app/src/main/res/mipmap-hdpi/ic_launcher.png android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png
-          cp android/app/src/main/res/mipmap-xhdpi/ic_launcher.png android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png
-          cp android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png
-          cp android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png
-          convert -size 1x1 xc:'#2b579a' -resize 48x48 android/app/src/main/res/mipmap-mdpi/ic_launcher_background.png
-          convert -size 1x1 xc:'#2b579a' -resize 72x72 android/app/src/main/res/mipmap-hdpi/ic_launcher_background.png
-          convert -size 1x1 xc:'#2b579a' -resize 96x96 android/app/src/main/res/mipmap-xhdpi/ic_launcher_background.png
-          convert -size 1x1 xc:'#2b579a' -resize 144x144 android/app/src/main/res/mipmap-xxhdpi/ic_launcher_background.png
-          convert -size 1x1 xc:'#2b579a' -resize 192x192 android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_background.png
+          cp icon.png android/app/src/main/res/mipmap-mdpi/ic_launcher.png
+          cp icon.png android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+          cp icon.png android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
+          cp icon.png android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+          cp icon.png android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+          cp icon.png android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png
+          cp icon.png android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png
+          cp icon.png android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png
+          cp icon.png android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
+          cp icon.png android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
 
       - name: 🔄 Sincronizar archivos web
         run: npx cap sync android
 
-      - name: 🛠️ Compilar APK Definitivo
+      - name: 🔨 Compilar APK
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon
+          ./gradlew assembleDebug
 
-      - name: 🚀 Subir APK Terminado
+      - name: 📤 Subir APK
         uses: actions/upload-artifact@v4
         with:
-          name: IA_OFFICE_ASSISTANT-MASTER_S
+          name: IA_OFFICE_ASSISTANT-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
