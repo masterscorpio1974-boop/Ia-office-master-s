@@ -22,19 +22,32 @@
 </div>
 
 <div class="ribbon" id="ribbonDoc">
-    <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px;">
+    <!-- Fila de formato rápido táctil -->
+    <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px;">
         <button onclick="aplicarEstilo('bold')"><b>B</b></button>
         <button onclick="aplicarEstilo('italic')"><i>I</i></button>
         <button onclick="aplicarEstilo('underline')"><u>U</u></button>
-        <div style="width: 1px; height: 20px; background: #ccc;"></div>
+        <div style="width: 1px; height: 18px; background: #ccc;"></div>
         <button onclick="aplicarTamano('3')">Normal</button>
         <button onclick="aplicarTamano('5')"><b>G</b></button>
         <button onclick="aplicarTamano('7')"><b>XG</b></button>
-        <div style="width: 1px; height: 20px; background: #ccc;"></div>
-        <div onclick="aplicarColor('#000000')" style="width: 22px; height: 22px; background: #000; border-radius: 50%; border: 2px solid #ccc; cursor: pointer; display: inline-block; vertical-align: middle;"></div>
-        <div onclick="aplicarColor('#2b579a')" style="width: 22px; height: 22px; background: #2b579a; border-radius: 50%; border: 2px solid #ccc; cursor: pointer; display: inline-block; vertical-align: middle;"></div>
-        <div onclick="aplicarColor('#cc0000')" style="width: 22px; height: 22px; background: #cc0000; border-radius: 50%; border: 2px solid #ccc; cursor: pointer; display: inline-block; vertical-align: middle;"></div>
     </div>
+    
+    <!-- PALETA DE COLORES FIJA DE UN SOLO TOQUE -->
+    <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 10px; background: #f5f5f5; padding: 6px; border-radius: 4px; border: 1px solid #ddd;">
+        <span style="font-size: 11px; font-weight: bold; color: #555;">Color:</span>
+        <button onclick="aplicarColor('#000000')" style="width: 26px; height: 26px; background: #000; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 2px #000; padding:0; cursor:pointer;"></button>
+        <button onclick="aplicarColor('#2b579a')" style="width: 26px; height: 26px; background: #2b579a; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 2px #000; padding:0; cursor:pointer;"></button>
+        <button onclick="aplicarColor('#cc0000')" style="width: 26px; height: 26px; background: #cc0000; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 2px #000; padding:0; cursor:pointer;"></button>
+    </div>
+    
+    <!-- ACCIONES DE PANEL LIMPIAS SIN EMOJIS -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 8px;">
+        <button onclick="cargarDatosGuardados()" style="background: #2b579a; color: white; font-size: 11px; padding: 8px 2px; font-weight: bold; border: none; border-radius: 4px;">Ver Datos</button>
+        <button onclick="crearNuevo()" style="background: #e0e0e0; font-size: 11px; padding: 8px 2px; font-weight: bold; border: 1px solid #ccc; border-radius: 4px;">Nuevo</button>
+        <button onclick="exportarExcel()" style="background: #e0e0e0; font-size: 11px; padding: 8px 2px; font-weight: bold; border: 1px solid #ccc; border-radius: 4px;">Copiar</button>
+    </div>
+
     <div class="format-grid">
         <button onclick="aplicarEstilo('justifyLeft')"><span>←</span>Alinear Izq</button>
         <button onclick="aplicarEstilo('justifyCenter')"><span>↔</span>Centrar</button>
@@ -59,17 +72,7 @@
 
 <div class="content">
     <div id="docView" class="editor-container" contenteditable="true" onmouseup="guardarSeleccion()" onkeyup="guardarSeleccion()" ontouchend="guardarSeleccion()">
-        <p><b>Alex Rivera</b> · Jefe de Operaciones</p>
-        <p><b>Asunto:</b> Resumen Trimestral - Edición COMPLETA BY MASTER S.</p>
-        <br>
-        <p>Esta versión incluye:</p>
-        <ul>
-            <li>Diseño propio, independiente y autónomo</li>
-            <li>Funciona 100% SIN INTERNET</li>
-            <li>Guarda todo automático en el dispositivo</li>
-            <li>Compatible con formatos estándar de texto y hojas de datos</li>
-            <li>Adaptado para uso profesional y personal</li>
-        </ul>
+        <p>Escribe aquí tu documento...</p>
     </div>
 
     <div id="sheetView" style="display:none;">
