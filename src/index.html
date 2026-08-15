@@ -3,16 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:;">
     <title>OFFICE_ASSISTANT By MASTER S.</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="head">
-    <div class="logo-img">
-        <img src="assets/logo.png" alt="S">
-    </div>
+    <div class="logo-img"><img src="assets/logo.png" alt="S"></div>
     <div class="title">
         <h1>OFFICE_ASSISTANT</h1>
         <p><small>By MASTER S. · VERSIÓN OFICIAL</small></p>
@@ -24,32 +21,28 @@
     <button onclick="saveAll()" class="btn-save">🔒 Guardar todo</button>
 </div>
 
-<!-- HERRAMIENTAS PROCESADOR DE TEXTO -->
 <div class="ribbon" id="ribbonDoc">
-    <div class="ribbon-row">
-        <button onclick="formato('bold')"><b>B</b></button>
-        <button onclick="formato('italic')"><i>I</i></button>
-        <button onclick="formato('underline')"><u>U</u></button>
-                <!-- Botones de Tamaño Rápido -->
-        <button onclick="cambiarTamanoRapido('3')">Normal</button>
-        <button onclick="cambiarTamanoRapido('5')"><b>G</b></button>
-        <button onclick="cambiarTamanoRapido('7')"><b>XG</b></button>
-        <div style="width: 1px; height: 20px; background: #ccc; margin: 0 4px; display: inline-block; vertical-align: middle;"></div>
-        <!-- Círculos de Color Directos Táctiles -->
-        <div onclick="cambiarColorRapido('#000000')" style="width: 22px; height: 22px; background: #000; border-radius: 50%; border: 2px solid #ccc; cursor: pointer; display: inline-block; vertical-align: middle;"></div>
-        <div onclick="cambiarColorRapido('#2b579a')" style="width: 22px; height: 22px; background: #2b579a; border-radius: 50%; border: 2px solid #ccc; cursor: pointer; display: inline-block; vertical-align: middle;"></div>
-        <div onclick="cambiarColorRapido('#cc0000')" style="width: 22px; height: 22px; background: #cc0000; border-radius: 50%; border: 2px solid #ccc; cursor: pointer; display: inline-block; vertical-align: middle;"></div>
-
+    <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px;">
+        <button onclick="aplicarEstilo('bold')"><b>B</b></button>
+        <button onclick="aplicarEstilo('italic')"><i>I</i></button>
+        <button onclick="aplicarEstilo('underline')"><u>U</u></button>
+        <div style="width: 1px; height: 20px; background: #ccc;"></div>
+        <button onclick="aplicarTamano('3')">Normal</button>
+        <button onclick="aplicarTamano('5')"><b>G</b></button>
+        <button onclick="aplicarTamano('7')"><b>XG</b></button>
+        <div style="width: 1px; height: 20px; background: #ccc;"></div>
+        <div onclick="aplicarColor('#000000')" style="width: 22px; height: 22px; background: #000; border-radius: 50%; border: 2px solid #ccc; cursor: pointer; display: inline-block; vertical-align: middle;"></div>
+        <div onclick="aplicarColor('#2b579a')" style="width: 22px; height: 22px; background: #2b579a; border-radius: 50%; border: 2px solid #ccc; cursor: pointer; display: inline-block; vertical-align: middle;"></div>
+        <div onclick="aplicarColor('#cc0000')" style="width: 22px; height: 22px; background: #cc0000; border-radius: 50%; border: 2px solid #ccc; cursor: pointer; display: inline-block; vertical-align: middle;"></div>
     </div>
     <div class="format-grid">
-        <button onclick="alinear('justifyLeft')"><span>←</span>Alinear Izq</button>
-        <button onclick="alinear('justifyCenter')"><span>↔</span>Centrar</button>
-        <button onclick="alinear('justifyRight')"><span>→</span>Alinear Der</button>
-        <button onclick="ejecutarComando('insertUnorderedList')"><span>•</span>Lista</button>
+        <button onclick="aplicarEstilo('justifyLeft')"><span>←</span>Alinear Izq</button>
+        <button onclick="aplicarEstilo('justifyCenter')"><span>↔</span>Centrar</button>
+        <button onclick="aplicarEstilo('justifyRight')"><span>→</span>Alinear Der</button>
+        <button onclick="aplicarEstilo('insertUnorderedList')"><span>•</span>Lista</button>
     </div>
 </div>
 
-<!-- HERRAMIENTAS HOJA DE CÁLCULO -->
 <div class="ribbon" id="ribbonSheet" style="display:none;">
     <div class="format-grid" style="grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));">
         <button onclick="insertarNuevaHoja()"><span>➕</span>+ Hoja</button>
@@ -65,8 +58,7 @@
 </div>
 
 <div class="content">
-    <!-- AREA PROCESADOR DE TEXTO -->
-    <div id="docView" class="editor-container" contenteditable="true">
+    <div id="docView" class="editor-container" contenteditable="true" onmouseup="guardarSeleccion()" onkeyup="guardarSeleccion()" ontouchend="guardarSeleccion()">
         <p><b>Alex Rivera</b> · Jefe de Operaciones</p>
         <p><b>Asunto:</b> Resumen Trimestral - Edición COMPLETA BY MASTER S.</p>
         <br>
@@ -80,7 +72,6 @@
         </ul>
     </div>
 
-    <!-- AREA HOJA DE CÁLCULO -->
     <div id="sheetView" style="display:none;">
         <div class="sheet-container" id="contenedorTabla">
             <p style="color:#666; font-size:13px; margin:0;">Presiona el botón <b>"+ Hoja"</b> arriba para desplegar un registro de datos interactivo.</p>
