@@ -1,18 +1,6 @@
 {
   "appId": "com.masterscorpio.iaofficeassistant",
   "appName": "IA_OFFICE_ASSISTANT",
-  "webDir": "src",
-  "server": {
-    "androidScheme": "https",
-    "allowNavigation": ["*"],
-    "cleartext": true
-  },
-  "android": {
-    "buildOptions": {
-      "keystorePath": "",
-      "keystoreAlias": "",
-      "keystorePassword": "",
-      "keystoreAliasPassword": ""
-    }
-  }
+  "webDir": "www",
+  "bundledWebRuntime": false
 }
