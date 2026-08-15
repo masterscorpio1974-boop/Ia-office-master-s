@@ -31,20 +31,17 @@
         <button onclick="aplicarTamano('5')"><b>G</b></button>
         <button onclick="aplicarTamano('7')"><b>XG</b></button>
     </div>
-    
     <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 10px; background: #f5f5f5; padding: 6px; border-radius: 4px; border: 1px solid #ddd;">
         <span style="font-size: 11px; font-weight: bold; color: #555;">Color:</span>
-        <button onclick="aplicarColor('#000000')" style="width: 26px; height: 26px; background: #000; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 2px #000; padding:0; cursor:pointer;"></button>
-        <button onclick="aplicarColor('#2b579a')" style="width: 26px; height: 26px; background: #2b579a; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 2px #000; padding:0; cursor:pointer;"></button>
-        <button onclick="aplicarColor('#cc0000')" style="width: 26px; height: 26px; background: #cc0000; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 2px #000; padding:0; cursor:pointer;"></button>
+        <button onclick="aplicarColor('#000000')" style="width:26px;height:26px;background:#000;border-radius:50%;border:2px solid #fff;box-shadow:0 0 2px #000;padding:0;"></button>
+        <button onclick="aplicarColor('#2b579a')" style="width:26px;height:26px;background:#2b579a;border-radius:50%;border:2px solid #fff;box-shadow:0 0 2px #000;padding:0;"></button>
+        <button onclick="aplicarColor('#cc0000')" style="width:26px;height:26px;background:#cc0000;border-radius:50%;border:2px solid #fff;box-shadow:0 0 2px #000;padding:0;"></button>
     </div>
-    
     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 8px;">
-        <button onclick="cargarDatosGuardados()" style="background: #2b579a; color: white; font-size: 11px; padding: 8px 2px; font-weight: bold; border: none; border-radius: 4px;">Ver Datos</button>
-        <button onclick="crearNuevo()" style="background: #e0e0e0; font-size: 11px; padding: 8px 2px; font-weight: bold; border: 1px solid #ccc; border-radius: 4px;">Nuevo</button>
-        <button onclick="copiarDocumento()" style="background: #e0e0e0; font-size: 11px; padding: 8px 2px; font-weight: bold; border: 1px solid #ccc; border-radius: 4px;">Copiar</button>
+        <button onclick="crearNuevo()" style="background:#e0e0e0;font-size:11px;padding:8px 2px;font-weight:bold;border:1px solid #ccc;border-radius:4px;">Nuevo</button>
+        <button onclick="copiarDocumento()" style="background:#e0e0e0;font-size:11px;padding:8px 2px;font-weight:bold;border:1px solid #ccc;border-radius:4px;">Copiar</button>
+        <button onclick="exportarPDF()" style="background:#e0e0e0;font-size:11px;padding:8px 2px;font-weight:bold;border:1px solid #ccc;border-radius:4px;">PDF</button>
     </div>
-
     <div class="format-grid">
         <button onclick="aplicarEstilo('justifyLeft')"><span>←</span>Alinear Izq</button>
         <button onclick="aplicarEstilo('justifyCenter')"><span>↔</span>Centrar</button>
@@ -54,12 +51,13 @@
 </div>
 
 <div class="ribbon" id="ribbonSheet" style="display:none;">
-    <div class="format-grid" style="grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));">
-        <button onclick="insertarNuevaHoja()"><span>➕</span>+ Hoja</button>
-        <button onclick="crearNuevoSheet()" style="background:#e0e0e0; border:1px solid #ccc;"><span>🗑️</span>Nuevo</button>
-        <button onclick="exportarExcel()"><span>📊</span>Excel</button>
-        <button onclick="exportarPDF()"><span>📄</span>PDF</button>
-        <button onclick="generarGraficaLocal()"><span>📈</span>Grafica</button>
+    <div class="format-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <button onclick="insertarNuevaHoja()">➕ + Hoja</button>
+        <button onclick="cargarDatosGuardados()" style="background:#2b579a;color:white;font-weight:bold;">👁️ Ver Datos</button>
+        <button onclick="crearNuevoSheet()">🗑️ Nuevo</button>
+        <button onclick="exportarExcel()">📊 Excel</button>
+        <button onclick="exportarPDF()">📄 PDF</button>
+        <button onclick="generarGraficaLocal()">📈 Grafica</button>
     </div>
 </div>
 
@@ -72,7 +70,6 @@
     <div id="docView" class="editor-container" contenteditable="true" onmouseup="guardarSeleccion()" onkeyup="guardarSeleccion()" ontouchend="guardarSeleccion()">
         <p>Escribe aquí tu documento...</p>
     </div>
-
     <div id="sheetView" style="display:none;">
         <div class="sheet-container" id="contenedorTabla">
             <p style="color:#666; font-size:13px; margin:0;">Presiona el botón <b>"+ Hoja"</b> arriba para desplegar un registro de datos interactivo.</p>
