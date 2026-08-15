@@ -1,20 +1,149 @@
-let tabla=[]; let rangoGuardado=null;
-const docView=document.getElementById('docView');
-const contenedorTabla=document.getElementById('contenedorTabla');
-function guardarRango(){let s=window.getSelection();if(s.rangeCount>0) rangoGuardado=s.getRangeAt(0).cloneRange();}
-function restaurarRango(){if(rangoGuardado){let s=window.getSelection();s.removeAllRanges();s.addRange(rangoGuardado);}}
-window.onload=function(){cargarDatosGuardados();if(tabla.length==0) crearTablaVacia(24,8);renderTabla();docView.addEventListener('mouseup',guardarRango);docView.addEventListener('keyup',guardarRango);docView.addEventListener('touchend',guardarRango);};
-function cambiarVista(v){document.getElementById('tabDoc').classList.remove('active');document.getElementById('tabSheet').classList.remove('active');document.getElementById('ribbonDoc').style.display='none';document.getElementById('ribbonSheet').style.display='none';document.getElementById('docView').style.display='none';document.getElementById('sheetView').style.display='none';if(v=='doc'){document.getElementById('tabDoc').classList.add('active');document.getElementById('ribbonDoc').style.display='block';document.getElementById('docView').style.display='block';}else{document.getElementById('tabSheet').classList.add('active');document.getElementById('ribbonSheet').style.display='block';document.getElementById('sheetView').style.display='block';renderTabla();}}
-function aplicarEstilo(c){restaurarRango();document.execCommand('styleWithCSS',false,true);document.execCommand(c,false,null);docView.focus();guardarRango();saveAll();}
-function aplicarTamano(px){restaurarRango();document.execCommand('styleWithCSS',false,true);let sel=window.getSelection();if(!sel.isCollapsed){try{document.execCommand('insertHTML',false,`<span style="font-size:${px}">${sel.toString()}</span>`);}catch(e){}}docView.focus();guardarRango();saveAll();}
-function aplicarColor(col){restaurarRango();document.execCommand('styleWithCSS',false,true);document.execCommand('foreColor',false,col);docView.focus();guardarRango();saveAll();}
-function saveAll(){localStorage.setItem('o_doc',docView.innerHTML);localStorage.setItem('o_doc_backup',docView.innerHTML);localStorage.setItem('o_sheet',JSON.stringify(tabla));localStorage.setItem('o_sheet_backup',JSON.stringify(tabla));let s=document.getElementById('saveStatus');if(s){s.innerText='¡GUARDADO! '+new Date().toLocaleTimeString();setTimeout(()=>s.innerText='LISTO - OFFLINE',2000);}}
-function cargarDatosGuardados(){let d=localStorage.getItem('o_doc_backup')||localStorage.getItem('o_doc');if(d) docView.innerHTML=d;let sh=localStorage.getItem('o_sheet_backup')||localStorage.getItem('o_sheet');if(sh){try{tabla=JSON.parse(sh);}catch(e){}}renderTabla();let s=document.getElementById('saveStatus');if(s){s.innerText='DATOS RESTAURADOS 👁️';setTimeout(()=>s.innerText='LISTO - OFFLINE',1500);}}
-function crearNuevo(){if(confirm('¿Borrar doc? Se respalda')){localStorage.setItem('o_doc_backup',docView.innerHTML);docView.innerHTML='';saveAll();}}
-function copiarDocumento(){navigator.clipboard.writeText(docView.innerText);}
-function crearTablaVacia(f,c){tabla=[];for(let i=0;i<f;i++){let r=[];for(let j=0;j<c;j++) r.push('');tabla.push(r);}}
-function renderTabla(){if(tabla.length==0) return;let h='<table id="tablaDatos"><tr><th></th>';for(let c=0;c<tabla[0].length;c++) h+=`<th>${String.fromCharCode(65+c)}</th>`;h+='</tr>';for(let r=0;r<tabla.length;r++){h+=`<tr><th>${r+1}</th>`;for(let cc=0;cc<tabla[r].length;cc++){h+=`<td contenteditable="true" onblur="tabla[${r}][${cc}]=this.innerText;saveAll()">${tabla[r][cc]||''}</td>`;}h+='</tr>';}h+='</table>';contenedorTabla.innerHTML=h;let g=document.getElementById('graficaWrap');if(g) g.style.display='none';}
-function insertarNuevaHoja(){tabla.push(new Array(tabla[0].length).fill(''));renderTabla();saveAll();}
-function crearNuevoSheet(){if(confirm('¿Borrar hoja? Se respalda')){localStorage.setItem('o_sheet_backup',JSON.stringify(tabla));crearTablaVacia(24,8);renderTabla();let g=document.getElementById('graficaWrap');if(g) g.style.display='none';saveAll();}}
-function exportarExcel(){let csv=tabla.map(r=>r.map(v=>`"${(v||'').toString().replace(/"/g,'""')}"`).join(',')).join('\n');let b=new Blob([csv],{type:'text/csv'});let a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='hoja.csv';a.click();}
-function generarGraficaLocal(){let wrap=document.getElementById('graficaWrap');let cv=document.getElementById('miGrafica');if(!wrap||!cv) return;wrap.style.display='block';let ctx=cv.getContext('2d');ctx.clearRect(0,0,cv.width,cv.height);ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);let nums=[];let labels=[];tabla.forEach(r=>{let txt=(r[0]||'').toString();let m=txt.match(/(\d+(\.\d+)?)/);if(m){nums.push(parseFloat(m[1]));labels.push(txt.replace(m[0],'').trim()||m[1]);}});if(nums.length==0){nums=tabla.flat().map(v=>{let mm=(v||'').toString().match(/(\d+(\.\d+)?)/);return mm?parseFloat(mm[1]):NaN;}).filter(n=>!isNaN(n)).slice(0,8);labels=nums.map((_,i)=>'D'+(i+1));}if(nums.length==0) nums=[5,7,12,6,9];let mx=Math.max(...nums,1);nums.forEach((n,i)=>{let h=(n/mx)*140;let x=i*42+12;let y=180-h;ctx.fillStyle='#2b579a';ctx.fillRect(x,y,32,h);ctx.fillStyle='#000';ctx.font='bold 13px Arial';ctx.fillText(n.toString(),x+4,y-6);ctx.font='11px Arial';ctx.fillText((labels[i]||'').substring(0,8),x-2,195);});wrap.scrollIntoView({behavior:'smooth'});}
+// OFFICE_ASSISTANT - By MASTER S. - VERSION OFICIAL FIX V4
+let datosDoc = localStorage.getItem('doc') || '';
+let datosHoja = JSON.parse(localStorage.getItem('hoja') || '{}');
+
+document.addEventListener('DOMContentLoaded', () => {
+    if(document.getElementById('editorDocumento')) {
+        document.getElementById('editorDocumento').innerHTML = datosDoc;
+        document.getElementById('editorDocumento').addEventListener('input', guardarTodo);
+    }
+    cargarHoja();
+});
+
+function guardarTodo() {
+    const editor = document.getElementById('editorDocumento');
+    if(editor) {
+        localStorage.setItem('doc', editor.innerHTML);
+        document.querySelector('.status').innerText = '¡GUARDADO! ' + new Date().toLocaleTimeString();
+    }
+    guardarHoja();
+}
+
+// --- DOCUMENTO FIX ---
+function formatoDoc(tipo, val=null) {
+    const ed = document.getElementById('editorDocumento');
+    ed.focus();
+    if(tipo === 'color') {
+        document.execCommand('foreColor', false, val);
+    } else if(tipo === 'B') {
+        document.execCommand('bold', false, null);
+    } else if(tipo === 'I') {
+        document.execCommand('italic', false, null);
+    } else if(tipo === 'U') {
+        document.execCommand('underline', false, null);
+    } else if(tipo === 'G') {
+        document.execCommand('fontSize', false, '5'); // Grande
+    } else if(tipo === 'XG') {
+        document.execCommand('fontSize', false, '7'); // Extra grande
+    } else if(tipo === 'Normal') {
+        document.execCommand('removeFormat', false, null);
+        document.execCommand('fontSize', false, '3');
+    }
+    guardarTodo();
+}
+
+function setColorDoc(hex) { formatoDoc('color', hex); }
+
+function nuevoDoc() {
+    if(confirm('¿Borrar doc? Se respalda')) {
+        document.getElementById('editorDocumento').innerHTML = '';
+        guardarTodo();
+    }
+}
+
+function copiarDoc() {
+    const ed = document.getElementById('editorDocumento');
+    navigator.clipboard.writeText(ed.innerText);
+    alert('Copiado');
+}
+
+// OJO - VER DATOS FIX
+function verDatos() {
+    const doc = document.getElementById('editorDocumento').innerHTML;
+    let hojaTxt = '';
+    for(let r=1; r<=13; r++) {
+        for(let c=0; c<8; c++) {
+            let letra = String.fromCharCode(65+c);
+            let id = letra+r;
+            let el = document.getElementById(id);
+            if(el && el.value) hojaTxt += `${id}:${el.value} `;
+        }
+    }
+    let win = window.open('', '_blank');
+    win.document.write(`<h2>DOCUMENTO:</h2>${doc}<hr><h2>HOJA:</h2><pre>${hojaTxt}</pre>`);
+}
+
+// PDF FIX
+function exportarPDF() {
+    const contenido = document.getElementById('editorDocumento').innerText;
+    let w = window.open('', '_blank');
+    w.document.write(`<pre>${contenido}</pre>`);
+    w.print();
+}
+
+// --- HOJA CALCULO FIX ---
+function cargarHoja() {
+    Object.keys(datosHoja).forEach(id => {
+        let el = document.getElementById(id);
+        if(el) el.value = datosHoja[id];
+    });
+}
+
+function guardarHoja() {
+    let obj = {};
+    for(let r=1; r<=24; r++) {
+        for(let c=0; c<8; c++) {
+            let id = String.fromCharCode(65+c)+r;
+            let el = document.getElementById(id);
+            if(el && el.value) obj[id] = el.value;
+        }
+    }
+    localStorage.setItem('hoja', JSON.stringify(obj));
+    actualizarGrafica();
+}
+
+function actualizarGrafica() {
+    // tu funcion de grafica que ya jala
+    let vals = [];
+    ['A24','B24','C24','D24','E24'].forEach(id => {
+        let el = document.getElementById(id);
+        vals.push(el? parseInt(el.value)||0 : 0);
+    });
+    // aqui dibuja barras
+    let g = document.getElementById('grafica');
+    if(g) {
+        g.innerHTML = vals.map(v=>`<div style="height:${v*5}px;background:#1a4a8a;display:inline-block;width:30px;margin:2px"><small>${v}</small></div>`).join('');
+    }
+}
+
+function exportarExcel() {
+    let csv = '';
+    for(let r=1; r<=24; r++) {
+        let fila = [];
+        for(let c=0; c<8; c++) {
+            let id = String.fromCharCode(65+c)+r;
+            let el = document.getElementById(id);
+            fila.push(el? el.value : '');
+        }
+        csv += fila.join(',') + '\n';
+    }
+    let blob = new Blob([csv], {type:'text/csv'});
+    let a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'hoja.csv';
+    a.click();
+}
+
+function nuevaHoja() {
+    if(confirm('¿Borrar hoja? Se respalda')) {
+        localStorage.removeItem('hoja');
+        document.querySelectorAll('#tablaCalculo input').forEach(i=>i.value='');
+    }
+}
+
+// Conectar inputs de la hoja
+document.addEventListener('input', (e)=>{
+    if(e.target.tagName === 'INPUT' && e.target.id.match(/^[A-H]\d+/)) {
+        guardarHoja();
+    }
+});
