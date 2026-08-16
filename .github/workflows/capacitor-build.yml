@@ -42,13 +42,20 @@ jobs:
         run: |
           rm -rf android
           npx cap add android
-      - name: 🎨 Generar Iconos Oficiales de la App
-        run: |
-          npm install -g @capacitor/assets
-          npx capacitor-assets generate --android --icon icon.png
-   
 
-      
+      - name: 🎨 Inyectar Logo en Recursos de Android
+        run: |
+          cp icon.png android/app/src/main/res/mipmap-mdpi/ic_launcher.png
+          cp icon.png android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+          cp icon.png android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
+          cp icon.png android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+          cp icon.png android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+          cp icon.png android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png
+          cp icon.png android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png
+          cp icon.png android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png
+          cp icon.png android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
+          cp icon.png android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
+
       - name: 🔄 Sincronizar archivos web
         run: npx cap sync android
 
