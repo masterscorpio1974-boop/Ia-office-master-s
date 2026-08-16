@@ -43,8 +43,9 @@ jobs:
           rm -rf android
           npx cap add android
 
-      - name: 🎨 Inyectar Logo en Recursos de Android
+            - name: 🎨 Inyectar Logo en Recursos de Android
         run: |
+          # 1. Copiar tu imagen encima de los PNG viejos
           cp icon.png android/app/src/main/res/mipmap-mdpi/ic_launcher.png
           cp icon.png android/app/src/main/res/mipmap-hdpi/ic_launcher.png
           cp icon.png android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
@@ -55,6 +56,10 @@ jobs:
           cp icon.png android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png
           cp icon.png android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
           cp icon.png android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
+          
+          # 2. BORRAR los archivos XML adaptativos para obligar a Android a usar el PNG
+          rm -f android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+          rm -f android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
 
       - name: 🔄 Sincronizar archivos web
         run: npx cap sync android
