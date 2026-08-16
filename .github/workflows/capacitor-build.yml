@@ -28,7 +28,6 @@ jobs:
         run: |
           npm install
           npm install @capacitor/android --save
-
       - name: 📂 Crear www y copiar archivos raiz
         run: |
           mkdir -p www
@@ -37,12 +36,10 @@ jobs:
           cp style.css www/
           cp icon.png www/
           ls -la www/
-
       - name: 🏗️ Construir plataforma Android Limpia
         run: |
           rm -rf android
           npx cap add android
-
       - name: 🎨 Inyectar Logo en Recursos de Android
         run: |
           cp icon.png android/app/src/main/res/mipmap-mdpi/ic_launcher.png
@@ -55,9 +52,6 @@ jobs:
           cp icon.png android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png
           cp icon.png android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
           cp icon.png android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
-          rm -f android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
-          rm -f android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
-
       - name: 🔄 Sincronizar archivos web
         run: npx cap sync android
 
@@ -66,7 +60,6 @@ jobs:
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug
-
       - name: 📤 Subir APK
         uses: actions/upload-artifact@v4
         with:
