@@ -40,10 +40,6 @@ jobs:
         run: |
           rm -rf android
           npx cap add android
-            - name: 🏗️ Construir plataforma Android Limpia
-        run: |
-          rm -rf android
-          npx cap add android
 
       - name: 🔄 Sincronizar archivos web
         run: npx cap sync android
