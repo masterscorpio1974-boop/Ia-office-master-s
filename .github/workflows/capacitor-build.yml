@@ -42,12 +42,13 @@ jobs:
         run: |
           rm -rf android
           npx cap add android
-
       - name: 🎨 Generar Iconos Oficiales de la App
         run: |
           npm install -g @capacitor/assets
-          npx capacitor-assets generate --android
+          npx capacitor-assets generate --android --icon icon.png
+   
 
+      
       - name: 🔄 Sincronizar archivos web
         run: npx cap sync android
 
