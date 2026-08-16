@@ -40,6 +40,14 @@ jobs:
         run: |
           rm -rf android
           npx cap add android
+            - name: 🏗️ Construir plataforma Android Limpia
+        run: |
+          rm -rf android
+          npx cap add android
+
+      - name: 🔄 Sincronizar archivos web
+        run: npx cap sync android
+
       - name: 🎨 Inyectar Logo en Recursos de Android
         run: |
           cp icon.png android/app/src/main/res/mipmap-mdpi/ic_launcher.png
@@ -52,8 +60,6 @@ jobs:
           cp icon.png android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png
           cp icon.png android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
           cp icon.png android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
-      - name: 🔄 Sincronizar archivos web
-        run: npx cap sync android
 
       - name: 🔨 Compilar APK
         run: |
