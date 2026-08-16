@@ -38,11 +38,10 @@ jobs:
           cp icon.png www/
           ls -la www/
 
-      - name: 🏗️ Agregar plataforma Android
+      - name: 🏗️ Construir plataforma Android Limpia
         run: |
-          if [ ! -d "android" ]; then
-            npx cap add android
-          fi
+          rm -rf android
+          npx cap add android
 
       - name: 🎨 Generar Iconos Oficiales de la App
         run: |
