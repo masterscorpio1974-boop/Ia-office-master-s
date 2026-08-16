@@ -175,14 +175,32 @@ function actualizarGraficaMuestra() {
 
 function alternarGrafica() {
     const g = document.getElementById('graficaContainer');
-    g.style.display = (g.style.display === 'flex') ? 'none' : 'flex';
+    if (!g) return;
+    
+    // 1. Cambia la visibilidad del contenedor
+    if (g.style.display === 'flex') {
+        g.style.display = 'none';
+    } else {
+        g.style.display = 'flex';
+        // 2. CORRECCIÓN: Fuerza el cálculo y dibujo de los números de inmediato al abrirse
+        actualizarGraficaMuestra();
+    }
 }
 
+
 function verMetadatosMatriz() {
-    let raw = JSON.stringify(APP_DATABASE.excel_matrix, null, 2);
-    let win = window.open('', '_blank');
-    win.document.write(`<h3>Estructura JSON de la Hoja (Raw Data):</h3><pre>${raw}</pre>`);
+    let rawDataTexto = JSON.stringify(APP_DATABASE.excel_matrix, null, 2);
+    const modal = document.getElementById('modalRaw');
+    const contenedorTexto = document.getElementById('textoModalRaw');
+    
+    if (modal && contenedorTexto) {
+        contenedorTexto.innerText = rawDataTexto;
+        modal.style.display = 'flex';
+    } else {
+        alert(rawDataTexto);
+    }
 }
+
 
 function exportarCSV() {
     let csvContent = '';
